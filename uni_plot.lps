@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="97"/>
-        <CursorPos X="38" Y="108"/>
+        <CursorPos X="48" Y="107"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit>
@@ -17,8 +17,8 @@
         <Filename Value="utils/logfunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="267"/>
-        <CursorPos X="20" Y="277"/>
+        <TopLine Value="147"/>
+        <CursorPos X="67" Y="160"/>
         <UsageCount Value="20"/>
       </Unit>
       <Unit>
@@ -56,8 +56,17 @@
         <CursorPos X="-1" Y="-1"/>
         <UsageCount Value="20"/>
       </Unit>
+      <Unit>
+        <Filename Value="utils/graphfunc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="2">
+    <JumpHistory HistoryIndex="3">
       <Position>
         <Filename Value="uni_plot.lpr"/>
         <Caret Line="169" Column="31" TopLine="158"/>
@@ -69,6 +78,10 @@
       <Position>
         <Filename Value="uni_plot.lpr"/>
         <Caret Line="220" Column="21" TopLine="202"/>
+      </Position>
+      <Position>
+        <Filename Value="uni_plot.lpr"/>
+        <Caret Line="107" Column="48" TopLine="97"/>
       </Position>
     </JumpHistory>
     <RunParams>

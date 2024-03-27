@@ -114,7 +114,7 @@ uses
   {$ENDIF}
   Classes, SysUtils, CustApp,
   { you can add units after this }
-  logfunc;
+  logfunc, engine;
 
 const
   VERSION: AnsiString = '0.0.0.1';
@@ -139,6 +139,14 @@ type
 procedure TUniPlotApplication.DoRun;
 var
   ErrorMsg: String;
+
+  output_filename: String;
+  xtype, ytype, : Byte;  
+  pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9: PGraphData = nil;
+  pen0_color, pen1_color, pen2_color, pen3_color, pen4_color, pen5_color, pen6_color, pen7_color, pen8_color, pen9_color: Byte;
+  text_color, ground_color, border_color, grid_color, axis_color: Byte;
+  width, height: Integer;
+  scene_x1, scene_y1, scene_x2, scene_y2, dx, dy: Double;
 begin
   // quick check parameters
   ErrorMsg := CheckOptions('hvdl', 'help version debug log');
@@ -174,8 +182,87 @@ begin
   if LOG_MODE then
     OpenLog(ChangeFileExt(ParamStr(0), '.log'));
 
+  if HasOption('out') then
+    output_filename := Trim(GetOptionValue('out'));
+
+  if HasOption('xtype') then
+    xtype := engine.ParseAxisType(Trim(GetOptionValue('xtype')));
+  if HasOption('ytype') then
+    ytype := engine.ParseAxisType(Trim(GetOptionValue('ytype')));
+
+  if HasOption('pen0') then
+    pen0 := engine.ParsePenData(Trim(GetOptionValue('pen0')));
+  if HasOption('pen1') then
+    pen1 := engine.ParsePenData(Trim(GetOptionValue('pen1')));
+  if HasOption('pen2') then
+    pen2 := engine.ParsePenData(Trim(GetOptionValue('pen2')));
+  if HasOption('pen3') then
+    pen3 := engine.ParsePenData(Trim(GetOptionValue('pen3')));
+  if HasOption('pen4') then
+    pen4 := engine.ParsePenData(Trim(GetOptionValue('pen4')));
+  if HasOption('pen5') then
+    pen5 := engine.ParsePenData(Trim(GetOptionValue('pen5')));
+  if HasOption('pen6') then
+    pen6 := engine.ParsePenData(Trim(GetOptionValue('pen6')));
+  if HasOption('pen7') then
+    pen7 := engine.ParsePenData(Trim(GetOptionValue('pen7')));
+  if HasOption('pen8') then
+    pen8 := engine.ParsePenData(Trim(GetOptionValue('pen8')));
+  if HasOption('pen9') then
+    pen9 := engine.ParsePenData(Trim(GetOptionValue('pen9')));
+
+  if HasOption('pen0_color') then
+    pen0_color := engine.ParseColorByName(Trim(GetOptionValue('pen0_color')));
+  if HasOption('pen1_color') then
+    pen1_color := engine.ParseColorByName(Trim(GetOptionValue('pen1_color')));
+  if HasOption('pen2_color') then
+    pen2_color := engine.ParseColorByName(Trim(GetOptionValue('pen2_color')));
+  if HasOption('pen3_color') then
+    pen3_color := engine.ParseColorByName(Trim(GetOptionValue('pen3_color')));
+  if HasOption('pen4_color') then
+    pen4_color := engine.ParseColorByName(Trim(GetOptionValue('pen4_color')));
+  if HasOption('pen5_color') then
+    pen5_color := engine.ParseColorByName(Trim(GetOptionValue('pen5_color')));
+  if HasOption('pen6_color') then
+    pen6_color := engine.ParseColorByName(Trim(GetOptionValue('pen6_color')));
+  if HasOption('pen7_color') then
+    pen7_color := engine.ParseColorByName(Trim(GetOptionValue('pen7_color')));
+  if HasOption('pen8_color') then
+    pen8_color := engine.ParseColorByName(Trim(GetOptionValue('pen8_color')));
+  if HasOption('pen9_color') then
+    pen9_color := engine.ParseColorByName(Trim(GetOptionValue('pen9_color')));
+
+  if HasOption('text_color') then
+    text_color := engine.ParseColorByName(Trim(GetOptionValue('text_color')));
+  if HasOption('ground_color') then
+    ground_color := engine.ParseColorByName(Trim(GetOptionValue('ground_color')));
+  if HasOption('border_color') then
+    border_color := engine.ParseColorByName(Trim(GetOptionValue('border_color')));
+  if HasOption('grid_color') then
+    grid_color := engine.ParseColorByName(Trim(GetOptionValue('grid_color')));
+  if HasOption('axis_color') then
+    axis_color := engine.ParseColorByName(Trim(GetOptionValue('axis_color')));
+
+  if HasOption('width') then
+    width := StrToInt(Trim(GetOptionValue('width')));
+  if HasOption('height') then
+    height := StrToInt(Trim(GetOptionValue('height')));
+
+  if HasOption('scene') then
+    engine.ParseSceneData(Trim(GetOptionValue('scene')), @scene_x1, @scene_y1, @scene_x2, @scene_y2);
+  if HasOption('dx') then
+    dx := StrToFloat(Trim(GetOptionValue('dx')));
+  if HasOption('dy') then
+    dy := StrToFloat(Trim(GetOptionValue('dy')));
 
   { add your program here }
+  engine.Run(output_filename, 
+	     xtype, ytype,
+	     pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9, 
+	     pen0_color, pen1_color, pen2_color, pen3_color, pen4_color, pen5_color, pen6_color, pen7_color, pen8_color, pen9_color, 
+             text_color, ground_color, border_color, grid_color, axis_color,
+	     width, height,
+             scene_x1, scene_y1, scene_x2, scene_y2, dx, dy);
 
   // stop program loop
   Terminate;

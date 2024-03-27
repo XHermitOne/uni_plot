@@ -125,8 +125,7 @@ type
     procedure GetPoint(AGraphData: PGraphData; X: Double; Y: Double; AIndex: LongInt);
 
     n_points: LongInt; // Количество точек
-
-    points: PGraphPoint;  // Точки графика
+    points: Array of TGraphPoint;  // Точки графика
     
     x1, y1, x2, y2: Double;  // Диапазон данных графика (Сцена)
     canvas_x1, canvas_y1, canvas_x2, canvas_y2: Integer;  // Графическая граница области графика
