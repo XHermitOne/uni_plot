@@ -11,15 +11,12 @@ unit engine;
 interface
 
 uses
-    Classes, SysUtils, Crt;
+    Classes, SysUtils, Crt,
+    exttypes, graphfunc;
 
 const
-  // Имя результирующего файла по умолчанию
-  DEFAULT_OUTPUT_PNG_FILENAME: AnsiString = './output.png';
   // По умолчанию вывод графиков в PNG
   DEFAULT_OUTPUT_FILE_FORMAT: AnsiString = 'PNG';
-
-type
 
 // Функция запуска основного алгоритма
 //   AOutputFileName - Имя результирующего файла
@@ -36,79 +33,30 @@ type
 // APen8 - Данные пера 9
 // APen9 - Данные пера 10
 // ASceneX1, ASceneY1, ASceneX2, ASceneY2 - Сцена
-function Run(AOutputFileName: AnsiString; AXType, AYType: Byte; 
-	     APen0, APen1, APen2, APen3, APen4, APen5, APen6, APen7, APen8, APen9: PGraphData,
-	     AImgWidth, AImgHeight: Integer,
+function Run(AOutputFileName: AnsiString; AXType, AYType: Byte;
+	     APen0, APen1, APen2, APen3, APen4, APen5, APen6, APen7, APen8, APen9: PGraphData;
+	     APen0Color, APen1Color, APen2Color, APen3Color, APen4Color, APen5Color, APen6Color, APen7Color, APen8Color, APen9Color: Byte;
+	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+	     AImgWidth, AImgHeight: Integer;
 	     ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
+
+//  Определить тип значений оси
+function ParseAxisType(AAxisType: AnsiString): Byte;
+//  Определить данные пера
+//  Данные в командной строке определяются как x1/y1,x2/y2,...
+function ParsePenData(AStrPenData: AnsiString): PGraphData;
+// Функция определения кода цвета по его имени
+function ParseColorByName(AColorName: String): Byte;
+//  Определить данные сцены
+//  Данные в командной строке определяются как x1/y1,x2/y2
+function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble): Boolean;
+
 
 implementation
 
 uses
-  strfunc, logfunc, graphfunc;
+  strfunc, logfunc, toolfunc;
 
-// Выполнить отрисовку графика в PNG файл
-//  png_filename - Полное имя PNG файла
-function DrawPNG(APNGFileName: AnsiString; AGraphData: PGraphData; AXType, AYType: Byte,
-                 AWidth, AHeight: Integer,
-                 ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean
-var
-  cairo_canvas: TCairoPngCanvas;
-  graphic: TGraph;
-begin
-  if strfunc.IsEmpty(APNGFileName) then
-    png_filename := DEFAULT_OUTPUT_PNG_FILENAME;
-
-  if AWidth = 0 then
-    AWidth := graphfunc.DEFAULT_WIDTH;
-
-  if AHeight = 0 then
-    AHeight := graphfunc.DEFAULT_HEIGHT;
-
-  logfunc.InfoMsgFmt('Draw PNG file: %s [%d x %d]', [png_filename, width, height]);
-
-  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-  //cairo_surface_set_device_offset(surface, 0.0, 1.0);
-  cr = cairo_create(surface);
-
-  // Значения по умолчанию
-  if dX <= 0 then
-    dX := 20;
-  if dY <= 0 then
-    dY := 2;
-
-  graphfunc.InitGraph(@graphic, AGraphData, @cairo_canvas, AWidth, AHeight, dX, dY);
-
-  if AGraphData <> nil then
-  begin
-    // Размер картинки
-    AGraphData^.canvas_x2 := AWidth - 1;
-    AGraphData^.canvas_y2 := AHeight - 1;
-    // Параметры сцены графика
-    if (scene_x1 <> scene_x2) and (scene_y1 <> scene_y2) then
-    begin
-      AGraphData^.x1 := scene_x1;
-      AGraphData^.y1 := scene_y1;
-      AGraphData^.x2 := scene_x2;
-      AGraphData^.y2 := scene_y2;
-      logfunc.InfoMsgFmt('Set graph data scene (%f, %f) - (%f, %f)', [scene_x1, scene_y1, scene_x2, scene_y2]);
-    end
-    else
-      logfunc.InfoMsgFmt('Graph data scene (%f, %f) - (%f, %f)', [scene_x1, scene_y1, scene_x2, scene_y2]);
-  end;
-
-  graphfunc.Draw(@graphic, AGraphData, False);
-
-  cairo_fill(cr);
-
-  cairo_surface_write_to_png(surface, png_filename);
-
-  cairo_surface_destroy(surface);
-  graphic.canvas := nil;
-  cairo_destroy(cr);
-  // graphic.cr = NULL;
-
-  Result := True;
-end;
 
 
 // Функция запуска основного алгоритма
@@ -118,7 +66,6 @@ function Run(AOutputFileName: AnsiString; AXType, AYType: Byte;
 	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
 	     AImgWidth, AImgHeight: Integer;
 	     ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
-var
 begin
   Result := False;
 
@@ -129,7 +76,7 @@ end;
 
 
 //  Определить тип значений оси
-function ParseAxisType(AAxisType: AnsiString): Byte
+function ParseAxisType(AAxisType: AnsiString): Byte;
 begin
   // По умолчанию
   Result := GM_OPTIMAL;
@@ -142,7 +89,7 @@ end;
 
 //  Определить данные пера
 //  Данные в командной строке определяются как x1/y1,x2/y2,...
-function ParsePenData(AStrPenData: AnsiString): PGraphData
+function ParsePenData(AStrPenData: AnsiString): PGraphData;
 var
   str_points: TArrayOfString;
   i: Integer = 0;
@@ -166,7 +113,7 @@ var
 begin
   logfunc.DebugMsg('Points parse');
 
-  if strfunc.IsEmpty(AStrPenData) then
+  if strfunc.IsEmptyStr(AStrPenData) then
   begin
     logfunc.WarningMsg('Not define pen data');
     Result := nil;
@@ -183,12 +130,12 @@ begin
 
   repeat
     str_point := str_points[i];
-    if strfunc.IsEmpty(str_point) then
+    if strfunc.IsEmptyStr(str_point) then
         break;
 
     point := strfunc.SplitStr(str_point, '/');
-    i_time = toolfunc.StrTimeToLong(point[0]);
-    y_data = StrToFloat(point[1]);
+    i_time := toolfunc.StrTimeToLong(point[0]);
+    y_data := StrToFloat(point[1]);
 
     New(point_data);
     point_data^.x := i_time;
@@ -214,7 +161,7 @@ begin
       max_data := prev_data;
 
     Inc(i);
-  until str_point;
+  until not strfunc.IsEmptyStr(str_point);
 
   // Указать границы графика
   pen_data^.x1 := min_time;
@@ -229,7 +176,7 @@ end;
 
 //  Определить данные сцены
 //  Данные в командной строке определяются как x1/y1,x2/y2
-function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble): Boolean
+function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble): Boolean;
 var
   str_points: TArrayOfString;  
   i: Integer= 0;
@@ -244,7 +191,7 @@ var
   point: TArrayOfString;
 begin
   logfunc.DebugMsg('Scene parse');
-  if strfunc.IsEmpty(AStrSceneData) then
+  if strfunc.IsEmptyStr(AStrSceneData) then
   begin
     logfunc.WarningMsg('Not define scene data');
     Result := False;
@@ -263,7 +210,7 @@ begin
 
   // Определяем первую точку сцены
   str_point := str_points[0];
-  if not strfunc.IsEmpty(str_point) then
+  if not strfunc.IsEmptyStr(str_point) then
   begin
     point := strfunc.SplitStr(str_point, '/');
     prev_time := toolfunc.StrTimeToLong(point[0]);
@@ -272,7 +219,7 @@ begin
 
   // Определяем вторую точку сцены
   str_point := str_points[1];
-  if not strfunc.IsEmpty(str_point) then
+  if not strfunc.IsEmptyStr(str_point) then
   begin
     point := strfunc.SplitStr(str_point, '/');
     i_time := toolfunc.StrTimeToLong(point[0]);
@@ -290,13 +237,13 @@ end;
 
 
 // Функция определения кода цвета по его имени
-function ParseColorByName(AColorName): Byte
+function ParseColorByName(AColorName: String): Byte;
 begin
   AColorName := UpperCase(AColorName);
-  case AColorName do
+  case AColorName of
     'BLACK': 	Result := BLACK_COLOR;
     'BLUE': 	Result := BLUE_COLOR;
-    'GREEN': 	Result := GREEN_COLOR
+    'GREEN': 	Result := GREEN_COLOR;
     'CYAN':     Result := CYAN_COLOR;
     'RED':      Result := RED_COLOR;
     'MAGENTA':  Result := MAGENTA_COLOR;

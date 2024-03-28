@@ -7,10 +7,9 @@
       <Unit>
         <Filename Value="uni_plot.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="97"/>
-        <CursorPos X="48" Y="107"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="177"/>
+        <CursorPos X="21" Y="189"/>
+        <UsageCount Value="33"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -19,7 +18,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="147"/>
         <CursorPos X="67" Y="160"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="33"/>
       </Unit>
       <Unit>
         <Filename Value="utils/sysfunc.pas"/>
@@ -27,16 +26,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="25" Y="10"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="33"/>
       </Unit>
       <Unit>
         <Filename Value="utils/exttypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="34"/>
+        <CursorPos X="3" Y="24"/>
+        <UsageCount Value="33"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utils/filefunc.pas"/>
@@ -45,7 +44,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="33"/>
       </Unit>
       <Unit>
         <Filename Value="utils/strfunc.pas"/>
@@ -54,34 +53,171 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="33"/>
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
         <IsPartOfProject Value="True"/>
+        <EditorIndex Value="3"/>
+        <CursorPos Y="14"/>
+        <UsageCount Value="33"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="engine.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="32"/>
+        <CursorPos Y="53"/>
+        <UsageCount Value="33"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/fcl-image/src/fpcanvas.pp"/>
+        <UnitName Value="FPCanvas"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="101"/>
+        <CursorPos X="35" Y="111"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/inc/mathh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="104"/>
+        <CursorPos X="14" Y="114"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils/toolfunc.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="6"/>
+        <CursorPos X="10" Y="17"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="3">
+    <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="uni_plot.lpr"/>
-        <Caret Line="169" Column="31" TopLine="158"/>
+        <Filename Value="engine.pas"/>
+        <Caret Line="44" Column="29" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="13" Column="20" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="43" Column="49" TopLine="27"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="20" Column="21" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="30" Column="12" TopLine="15"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="40" Column="12" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="14" Column="12"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="62" Column="44" TopLine="39"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="54" Column="109" TopLine="39"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="58" Column="38" TopLine="39"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="59" Column="11" TopLine="39"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="123" Column="46" TopLine="111"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="17" Column="10" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="123" Column="46" TopLine="112"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="124" Column="13" TopLine="112"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="150" Column="9" TopLine="139"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="165" Column="82" TopLine="155"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="150" Column="13" TopLine="139"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="180" Column="24" TopLine="170"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="208" Column="28" TopLine="188"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="226" Column="53" TopLine="215"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="229" Column="21" TopLine="217"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="232" Column="37" TopLine="221"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="36" TopLine="24"/>
       </Position>
       <Position>
         <Filename Value="uni_plot.lpr"/>
-        <Caret Line="165" Column="11" TopLine="158"/>
+        <Caret Line="144" Column="15" TopLine="132"/>
       </Position>
       <Position>
         <Filename Value="uni_plot.lpr"/>
-        <Caret Line="220" Column="21" TopLine="202"/>
+        <Caret Line="117" Column="39" TopLine="109"/>
       </Position>
       <Position>
         <Filename Value="uni_plot.lpr"/>
-        <Caret Line="107" Column="48" TopLine="97"/>
+        <Caret Line="152" Column="3" TopLine="133"/>
+      </Position>
+      <Position>
+        <Filename Value="uni_plot.lpr"/>
+        <Caret Line="151" TopLine="139"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="48" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="50" TopLine="32"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -25,6 +25,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="cairocanvas_pkg"/>
+      </Item>
+      <Item>
         <PackageName Value="LazUtils"/>
       </Item>
     </RequiredPackages>
@@ -55,6 +58,14 @@
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="engine.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils/toolfunc.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

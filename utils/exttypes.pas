@@ -17,15 +17,15 @@ uses
 type
   {Указатели на основные типы}
   // Целые
-  PByte = ^Byte;		// 0..255			1 байт
-  PShortInt = ^ShortInt;	// -128..+127                   1 байт
-  PWord = ^Word;		// 0..65535                     2 байта
-  PSmallInt = ^SmallInt;	// -32768..+32767               2 байта
-  PInteger = ^Integer;		// -2147483648..+2147483647     4 байта
-  PLongInt = ^LongInt;		// -2147483648..+2147483647     4 байта
-  PLongWord = ^LongWord;	// 0..4294967295		4 байта
-  PCardinal = ^Cardinal;	// 0..4294967295		4 байта
-  PInt64 = ^Int64;		// -2^63..+2^63-1		8 байт
+  PByte = ^Byte;		      // 0..255			                1 байт
+  PShortInt = ^ShortInt;	  // -128..+127                     1 байт
+  PWord = ^Word;		      // 0..65535                       2 байта
+  PSmallInt = ^SmallInt;	  // -32768..+32767                 2 байта
+  //PInteger = ^Integer;		  // -2147483648..+2147483647       4 байта
+  PLongInt = ^LongInt;		  // -2147483648..+2147483647       4 байта
+  PLongWord = ^LongWord;	  // 0..4294967295		            4 байта
+  PCardinal = ^Cardinal;	  // 0..4294967295		            4 байта
+  PInt64 = ^Int64;		      // -2^63..+2^63-1		            8 байт
 
   // Логические
   PBoolean = ^Boolean;		// 1 байт

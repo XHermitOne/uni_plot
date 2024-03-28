@@ -114,7 +114,7 @@ uses
   {$ENDIF}
   Classes, SysUtils, CustApp,
   { you can add units after this }
-  logfunc, engine;
+  logfunc, toolfunc, engine, graphfunc;
 
 const
   VERSION: AnsiString = '0.0.0.1';
@@ -141,8 +141,8 @@ var
   ErrorMsg: String;
 
   output_filename: String;
-  xtype, ytype, : Byte;  
-  pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9: PGraphData = nil;
+  xtype, ytype: Byte;
+  pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9: PGraphData;
   pen0_color, pen1_color, pen2_color, pen3_color, pen4_color, pen5_color, pen6_color, pen7_color, pen8_color, pen9_color: Byte;
   text_color, ground_color, border_color, grid_color, axis_color: Byte;
   width, height: Integer;
