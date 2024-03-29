@@ -7,18 +7,18 @@
       <Unit>
         <Filename Value="uni_plot.lpr"/>
         <IsPartOfProject Value="True"/>
-        <TopLine Value="177"/>
-        <CursorPos X="21" Y="189"/>
-        <UsageCount Value="33"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="158"/>
+        <CursorPos X="23" Y="173"/>
+        <UsageCount Value="49"/>
       </Unit>
       <Unit>
         <Filename Value="utils/logfunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="147"/>
-        <CursorPos X="67" Y="160"/>
-        <UsageCount Value="33"/>
+        <TopLine Value="645"/>
+        <CursorPos Y="657"/>
+        <UsageCount Value="49"/>
       </Unit>
       <Unit>
         <Filename Value="utils/sysfunc.pas"/>
@@ -26,16 +26,15 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="25" Y="10"/>
-        <UsageCount Value="33"/>
+        <UsageCount Value="49"/>
       </Unit>
       <Unit>
         <Filename Value="utils/exttypes.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="3" Y="24"/>
-        <UsageCount Value="33"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="49"/>
       </Unit>
       <Unit>
         <Filename Value="utils/filefunc.pas"/>
@@ -44,7 +43,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="33"/>
+        <UsageCount Value="49"/>
       </Unit>
       <Unit>
         <Filename Value="utils/strfunc.pas"/>
@@ -53,24 +52,32 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="33"/>
+        <UsageCount Value="49"/>
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <CursorPos Y="14"/>
-        <UsageCount Value="33"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="240"/>
+        <CursorPos X="28" Y="245"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="60"/>
+        <CursorPos X="10" Y="63"/>
+        <UsageCount Value="49"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils/toolfunc.pas"/>
+        <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="32"/>
-        <CursorPos Y="53"/>
-        <UsageCount Value="33"/>
+        <TopLine Value="22"/>
+        <CursorPos X="23" Y="33"/>
+        <UsageCount Value="37"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -79,150 +86,116 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="101"/>
         <CursorPos X="35" Y="111"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/inc/mathh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="104"/>
         <CursorPos X="14" Y="114"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
-        <Filename Value="utils/toolfunc.pas"/>
-        <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="6"/>
-        <CursorPos X="10" Y="17"/>
-        <UsageCount Value="21"/>
-        <Loaded Value="True"/>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/components/cairocanvas/cairocanvas.pas"/>
+        <UnitName Value="CairoCanvas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="112"/>
+        <CursorPos X="19" Y="936"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="4" Y="28"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/inc/typshrdh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="95"/>
+        <CursorPos X="3" Y="101"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="133"/>
+        <CursorPos X="3" Y="146"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/printers.pas"/>
+        <UnitName Value="Printers"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="342"/>
+        <CursorPos X="3" Y="78"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="3">
       <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="44" Column="29" TopLine="26"/>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="332" TopLine="315"/>
       </Position>
       <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="13" Column="20" TopLine="4"/>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="333" Column="83" TopLine="315"/>
       </Position>
       <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="43" Column="49" TopLine="27"/>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="499" Column="20" TopLine="492"/>
       </Position>
       <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="20" Column="21" TopLine="8"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="30" Column="12" TopLine="15"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="40" Column="12" TopLine="22"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="14" Column="12"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="62" Column="44" TopLine="39"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="54" Column="109" TopLine="39"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="58" Column="38" TopLine="39"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="59" Column="11" TopLine="39"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="123" Column="46" TopLine="111"/>
-      </Position>
-      <Position>
-        <Filename Value="utils/toolfunc.pas"/>
-        <Caret Line="17" Column="10" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="123" Column="46" TopLine="112"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="124" Column="13" TopLine="112"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="150" Column="9" TopLine="139"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="165" Column="82" TopLine="155"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="150" Column="13" TopLine="139"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="180" Column="24" TopLine="170"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="208" Column="28" TopLine="188"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="226" Column="53" TopLine="215"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="229" Column="21" TopLine="217"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="232" Column="37" TopLine="221"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="36" TopLine="24"/>
-      </Position>
-      <Position>
-        <Filename Value="uni_plot.lpr"/>
-        <Caret Line="144" Column="15" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="uni_plot.lpr"/>
-        <Caret Line="117" Column="39" TopLine="109"/>
-      </Position>
-      <Position>
-        <Filename Value="uni_plot.lpr"/>
-        <Caret Line="152" Column="3" TopLine="133"/>
-      </Position>
-      <Position>
-        <Filename Value="uni_plot.lpr"/>
-        <Caret Line="151" TopLine="139"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="48" TopLine="42"/>
-      </Position>
-      <Position>
-        <Filename Value="engine.pas"/>
-        <Caret Line="50" TopLine="32"/>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="850" Column="45" TopLine="830"/>
       </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes ActiveMode=""/>
+      <Modes ActiveMode="default">
+        <Mode Name="default">
+          <local>
+            <CommandLineParams Value="./uni_plot --debug --out=./test/output.png --xtype=T --ytype=N"/>
+          </local>
+        </Mode>
+      </Modes>
     </RunParams>
+    <HistoryLists>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="/usr/bin/gnome-terminal -t &apos;Lazarus Run Output&apos; -e &apos;$(LazarusDir)/tools/runwait.sh $(TargetCmdLine)&apos;"/>
+      </List>
+      <List Name="CommandLineParameters" Count="3">
+        <Item1 Value="./uni_plot --debug --out=./test/output.png --xtype=T --ytype=N"/>
+        <Item2 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/0.11,00:01:00/0.4,00:02:00/0.25,00:03:00/0.3,00:04:00/0.77"/>
+        <Item3 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/50,00:01:00/34,00:02:00/73,00:03:00/62,00:04:00/21"/>
+      </List>
+    </HistoryLists>
   </ProjectSession>
+  <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="utils/graphfunc.pas"/>
+        <Line Value="688"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="utils/graphfunc.pas"/>
+        <Line Value="976"/>
+      </Item>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="utils/graphfunc.pas"/>
+        <Line Value="448"/>
+      </Item>
+    </BreakPoints>
+  </Debugging>
 </CONFIG>

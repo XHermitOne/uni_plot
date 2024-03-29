@@ -141,15 +141,48 @@ var
   ErrorMsg: String;
 
   output_filename: String;
-  xtype, ytype: Byte;
-  pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9: PGraphData;
-  pen0_color, pen1_color, pen2_color, pen3_color, pen4_color, pen5_color, pen6_color, pen7_color, pen8_color, pen9_color: Byte;
-  text_color, ground_color, border_color, grid_color, axis_color: Byte;
-  width, height: Integer;
-  scene_x1, scene_y1, scene_x2, scene_y2, dx, dy: Double;
+  xtype: Byte = 1;
+  ytype: Byte = 1;
+
+  pen0: PGraphData = nil;
+  pen1: PGraphData = nil;
+  pen2: PGraphData = nil;
+  pen3: PGraphData = nil;
+  pen4: PGraphData = nil;
+  pen5: PGraphData = nil;
+  pen6: PGraphData = nil;
+  pen7: PGraphData = nil;
+  pen8: PGraphData = nil;
+  pen9: PGraphData = nil;
+
+  pen0_color: Byte = 0;
+  pen1_color: Byte = 0;
+  pen2_color: Byte = 0;
+  pen3_color: Byte = 0;
+  pen4_color: Byte = 0;
+  pen5_color: Byte = 0;
+  pen6_color: Byte = 0;
+  pen7_color: Byte = 0;
+  pen8_color: Byte = 0;
+  pen9_color: Byte = 0;
+
+  text_color: Byte = 3;
+  ground_color: Byte = 0;
+  border_color: Byte = 8;
+  grid_color: Byte = 8;
+  axis_color: Byte = 8;
+
+  width: Integer = 0;
+  height: Integer = 0;
+  scene_x1: Double = 0.0;
+  scene_y1: Double = 0.0;
+  scene_x2: Double = 0.0;
+  scene_y2: Double = 0.0;
+  dx: Double = 0.0;
+  dy: Double = 0.0;
 begin
   // quick check parameters
-  ErrorMsg := CheckOptions('hvdl', 'help version debug log');
+  ErrorMsg := CheckOptions('hvdl', 'help version debug log out: xtype: ytype: pen0: pen1: pen2: pen3: pen4: pen5: pen6: pen7: pen8: pen9: pen0_color: pen1_color: pen2_color: pen3_color: pen4_color: pen5_color: pen6_color: pen7_color: pen8_color: pen9_color: text_color: ground_color: border_color: grid_color: axis_color: width: height: scene: dx: dy:');
   if ErrorMsg <> '' then begin
     ShowException(Exception.Create(ErrorMsg));
     Terminate;

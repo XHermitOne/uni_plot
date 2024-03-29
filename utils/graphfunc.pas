@@ -10,8 +10,8 @@ unit graphfunc;
 interface
 
 uses
-  SysUtils,
-  Graphics, CairoCanvas,
+  Types, SysUtils,
+  Graphics, CairoCanvas, Printers,
   exttypes;
 
 const
@@ -54,8 +54,8 @@ const
   DEFAULT_HEIGHT: Integer = 480;
 
   // Направление
-  HORIZ_DIRECTION: Boolean = False;   // Горизонтальное направление 
-  VERT_DIRECTION: Boolean = True;     // Вертикальное направление 
+  HORIZ_DIRECTION: Boolean = False;   // Горизонтальное направление
+  VERT_DIRECTION: Boolean = True;     // Вертикальное направление
 
   // Имя результирующего файла по умолчанию
   DEFAULT_OUTPUT_PNG_FILENAME: AnsiString = './output.png';
@@ -198,8 +198,10 @@ var
 			                canvas_y2: 479);
 
 // Функции обработки графика
-procedure SetCgaColor(AGraph: PGraph; AColor: Byte);
+function GetColorByCga(AColor: Byte): TColor;
+//procedure SetCgaColor(AGraph: PGraph; AColor: Byte);
 procedure OutTextXY(AGraph: PGraph; x, y: Integer; AText: AnsiString; AOrient: Boolean);
+procedure SetDotLineStyle(AGraph: PGraph);
 procedure SetDashLineStyle(AGraph: PGraph);
 procedure SetSolidLineStyle(AGraph: PGraph);
 
@@ -240,44 +242,81 @@ function DrawPNG(APNGFileName: AnsiString; AGraphData: PGraphData; AXType, AYTyp
 implementation
 
 uses
-  math, strfunc, logfunc;
+  math, strfunc, toolfunc, logfunc;
 
 // Установить текущий цвет отрисовки
-procedure SetCgaColor(AGraph: PGraph; AColor: Byte);
+function GetColorByCga(AColor: Byte): TColor;
 begin
-  logfunc.InfoMsgFmt('Set CGA color: %d', [AColor]);
+  Result := Graphics.clBlack;
+  logfunc.InfoMsgFmt('Get CGA color: %d', [AColor]);
 
   case AColor of
-    0: AGraph^.canvas^.Pen.Color := Graphics.clBlack; 	// BLACK
-    1: AGraph^.canvas^.Pen.Color := Graphics.clNavy;  	// BLUE
-    2: AGraph^.canvas^.Pen.Color := Graphics.clGreen;  	// GREEN
-    3: AGraph^.canvas^.Pen.Color := Graphics.clTeal;  	// CYAN
-    4: AGraph^.canvas^.Pen.Color := Graphics.clMaroon; 	// RED
-    5: AGraph^.canvas^.Pen.Color := Graphics.clPurple; 	// MAGENTA
-    6: AGraph^.canvas^.Pen.Color := Graphics.clOlive;  	// BROWN
-    7: AGraph^.canvas^.Pen.Color := Graphics.clSilver; 	// LIGHTGRAY
-    8: AGraph^.canvas^.Pen.Color := Graphics.clGray;  	// DARKGRAY
-    9: AGraph^.canvas^.Pen.Color := Graphics.clBlue;  	// LIGHTBLUE
-    10: AGraph^.canvas^.Pen.Color := Graphics.clLime; 	// LIGHTGREEN
-    11: AGraph^.canvas^.Pen.Color := Graphics.clAqua; 	// LIGTHCYAN
-    12: AGraph^.canvas^.Pen.Color := Graphics.clRed; 	// LIGHTRED
-    13: AGraph^.canvas^.Pen.Color := Graphics.clFuchsia;// LIGHTMAGENTA
-    14: AGraph^.canvas^.Pen.Color := Graphics.clYellow;	// YELLOW
-    15: AGraph^.canvas^.Pen.Color := Graphics.clWhite; 	// WHITE
+    0: Result := Graphics.clBlack; 	// BLACK
+    1: Result := Graphics.clNavy;  	// BLUE
+    2: Result := Graphics.clGreen;  	// GREEN
+    3: Result := Graphics.clTeal;  	// CYAN
+    4: Result := Graphics.clMaroon; 	// RED
+    5: Result := Graphics.clPurple; 	// MAGENTA
+    6: Result := Graphics.clOlive;  	// BROWN
+    7: Result := Graphics.clSilver; 	// LIGHTGRAY
+    8: Result := Graphics.clGray;  	// DARKGRAY
+    9: Result := Graphics.clBlue;  	// LIGHTBLUE
+    10: Result := Graphics.clLime; 	// LIGHTGREEN
+    11: Result := Graphics.clAqua; 	// LIGTHCYAN
+    12: Result := Graphics.clRed; 	// LIGHTRED
+    13: Result := Graphics.clFuchsia;// LIGHTMAGENTA
+    14: Result := Graphics.clYellow;	// YELLOW
+    15: Result := Graphics.clWhite; 	// WHITE
   else
     logfunc.WarningMsgFmt('Incorrect CGA color: %d', [AColor]);
   end;
 end;
 
+// Установить текущий цвет отрисовки
+//procedure SetCgaColor(AGraph: PGraph; AColor: Byte);
+//var
+//  color: TColor = 0;
+//begin
+//  logfunc.InfoMsgFmt('Set CGA color: %d', [AColor]);
+//
+//  case AColor of
+//    0: color := Graphics.clBlack; 	// BLACK
+//    1: color := Graphics.clNavy;  	// BLUE
+//    2: color := Graphics.clGreen;  	// GREEN
+//    3: color := Graphics.clTeal;  	// CYAN
+//    4: color := Graphics.clMaroon; 	// RED
+//    5: color := Graphics.clPurple; 	// MAGENTA
+//    6: color := Graphics.clOlive;  	// BROWN
+//    7: color := Graphics.clSilver; 	// LIGHTGRAY
+//    8: color := Graphics.clGray;  	// DARKGRAY
+//    9: color := Graphics.clBlue;  	// LIGHTBLUE
+//    10: color := Graphics.clLime; 	// LIGHTGREEN
+//    11: color := Graphics.clAqua; 	// LIGTHCYAN
+//    12: color := Graphics.clRed; 	// LIGHTRED
+//    13: color := Graphics.clFuchsia;// LIGHTMAGENTA
+//    14: color := Graphics.clYellow;	// YELLOW
+//    15: color := Graphics.clWhite; 	// WHITE
+//  else
+//    logfunc.WarningMsgFmt('Incorrect CGA color: %d', [AColor]);
+//  end;
+//
+//  AGraph^.canvas^.Pen.Color := color;
+//  AGraph^.canvas^.Brush.Color := color;
+//  AGraph^.canvas^.Font.Color := color;
+//end;
+
 // Вывод текста
 procedure OutTextXY(AGraph: PGraph; x, y: Integer; AText: AnsiString; AOrient: Boolean);
+var
+  text_size: TSize;
 begin
   //cairo_text_extents_t te;
   //cairo_text_extents(graph->cr, text, &te);
+  text_size := AGraph^.canvas^.TextExtent(AText);
 
   if AOrient = HORIZ_DIRECTION then
     // cairo_move_to(graph->cr, x - te.width - te.x_bearing, y - te.height / 2 - te.y_bearing);
-    AGraph^.canvas^.TextOut(x, y, AText)
+    AGraph^.canvas^.TextOut(x - text_size.Width, y - Round(text_size.Height / 2), AText)
   else
     if AOrient = VERT_DIRECTION then
     begin
@@ -285,18 +324,38 @@ begin
 
       // cairo_save(graph->cr);
       // cairo_rotate(graph->cr, - M_PI / 2);
-      AGraph^.canvas^.EndDoc;
-      // AGraph^.canvas^.Orientation := ;
+      // AGraph^.canvas^.EndDoc;
+      //AGraph^.canvas^.Orientation := Printers.poLandscape;
 
       // cairo_show_text(graph->cr, text);
-      AGraph^.canvas^.TextOut(x, y, AText);
+      AGraph^.canvas^.Font.Orientation := 900;
+      //AGraph^.canvas^.TextOut(x - text_size.Width, y - Round(text_size.Height / 2), AText);
+      AGraph^.canvas^.TextOut(x - Round(text_size.Height / 2), y + text_size.Width, AText);
+      AGraph^.canvas^.Font.Orientation := 0;
 
+      //AGraph^.canvas^.Orientation := Printers.poPortrait;
       // cairo_restore(graph->cr);
     end;
 end;
 
 
 // Установить точечный стиль отрисовки линий
+procedure SetDotLineStyle(AGraph: PGraph);
+//var
+//  dash_ink: Double = 1.0;
+//  dash_skip: Double = 3.0;
+//  ndash: Integer;
+//  offset: Double = -50.0;
+begin
+  //ndash  = sizeof(dashes) / sizeof(dashes[0]);
+  //
+  //cairo_set_dash(graph->cr, dashes, ndash, offset);
+  //cairo_set_line_width(graph->cr, 1.0);
+
+  AGraph^.canvas^.Pen.Style := psDot;
+  AGraph^.canvas^.Pen.Width := 1;
+end;
+
 procedure SetDashLineStyle(AGraph: PGraph);
 //var
 //  dash_ink: Double = 1.0;
@@ -375,8 +434,8 @@ begin
   end;
 
   logfunc.InfoMsg('Default graph options:');
-  logfunc.InfoMsgFmt(#9'X1: %d Y1: %d', [AGraph^.canvas_x1, AGraph^.canvas_y1]);
-  logfunc.InfoMsgFmt(#9'X2: %d Y2: %d', [AGraph^.canvas_x2, AGraph^.canvas_y2]);
+  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.canvas_x1, AGraph^.canvas_y1]);
+  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.canvas_x2, AGraph^.canvas_y2]);
   logfunc.InfoMsgFmt(#9'dX: %f dY: %f', [AGraph^.dX, AGraph^.dY]);
 
   // Переносим настройки на данные графика
@@ -407,8 +466,8 @@ begin
     SwapDouble(@AGraph^.graph_data^.y1, @AGraph^.graph_data^.y2);
 
   logfunc.InfoMsg('Check coord graph options:');
-  logfunc.InfoMsgFmt(#9'X1: %d Y1: %d', [AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1]);
-  logfunc.InfoMsgFmt(#9'X2: %d Y2: %d', [AGraph^.graph_data^.canvas_x2, AGraph^.graph_data^.canvas_y2]);
+  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1]);
+  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.graph_data^.canvas_x2, AGraph^.graph_data^.canvas_y2]);
 
   CheckCoords(@AGraph^.graph_data^.canvas_x1, @AGraph^.graph_data^.canvas_x2, MINX, MAXX, 200);
   CheckCoords(@AGraph^.graph_data^.canvas_y1, @AGraph^.graph_data^.canvas_y2, MINY, MAXY, 200);
@@ -430,14 +489,14 @@ begin
   AGraph^.dY := Double(AGraph^.canvas_y2 - AGraph^.canvas_y1) / (AGraph^.graph_data^.y2 - AGraph^.graph_data^.y1);
 
   logfunc.InfoMsg('Checked graph options:');
-  logfunc.InfoMsgFmt(#9'X1: %d Y1: %d', [AGraph^.canvas_x1, AGraph^.canvas_y1]);
-  logfunc.InfoMsgFmt(#9'X2: %d Y2: %d', [AGraph^.canvas_x2, AGraph^.canvas_y2]);
+  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.canvas_x1, AGraph^.canvas_y1]);
+  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.canvas_x2, AGraph^.canvas_y2]);
   logfunc.InfoMsgFmt(#9'dX: %f dY: %f', [AGraph^.dX, AGraph^.dY]);
   logfunc.InfoMsg('Graph data options:');
   logfunc.InfoMsgFmt(#9'x1: %f y1: %f', [AGraph^.graph_data^.x1, AGraph^.graph_data^.y1]);
   logfunc.InfoMsgFmt(#9'x2: %f y2: %f', [AGraph^.graph_data^.x2, AGraph^.graph_data^.y2]);
-  logfunc.InfoMsgFmt(#9'X1: %d Y1: %d', [AGraph^.graph_data^.X1, AGraph^.graph_data^.Y1]);
-  logfunc.InfoMsgFmt(#9'X2: %d Y2: %d', [AGraph^.graph_data^.X2, AGraph^.graph_data^.Y2]);
+  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1]);
+  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.graph_data^.canvas_x2, AGraph^.graph_data^.canvas_y2]);
 
   if AGraph^.graph_data^.GetPoint = nil then
   begin
@@ -528,7 +587,10 @@ end;
 procedure DrawLabelArea(AGraph: PGraph);
 begin
   // Отрисовка области под надписи
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.ground);
+  //SetCgaColor(AGraph, AGraph^.graph_data^.color^.ground);
+  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.graph_data^.color^.ground);
+  AGraph^.canvas^.Pen.Color := AGraph^.canvas^.Brush.Color;
+
   // Косяк с заливкой------------------------------------------------v
   // cairo_rectangle(AGraph^.cr, AGraph^.graph_data^.X1, AGraph^.Y2, AGraph^.graph_data^.X2 + 1, AGraph^.graph_data^.Y2);
   AGraph^.canvas^.Rectangle(AGraph^.graph_data^.canvas_x1, AGraph^.canvas_y2,
@@ -536,7 +598,7 @@ begin
   // Операция cairo_fill() используется вместо контура как шаблон закрашивания.
   // cairo_fill(AGraph^.cr);
 
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.ground);
+  // SetCgaColor(AGraph, AGraph^.graph_data^.color^.ground);
   //cairo_rectangle(AGraph^.cr, AGraph^.graph_data^.X1, AGraph^.graph_data^.Y1, AGraph^.X1, AGraph^.Y2);
   AGraph^.canvas^.Rectangle(AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1,
                             AGraph^.canvas_x1, AGraph^.canvas_y2);
@@ -549,10 +611,14 @@ end;
 procedure DrawGraphArea(AGraph: PGraph);
 begin
   // Область поля графика
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.ground);
+  //SetCgaColor(AGraph, AGraph^.graph_data^.color^.ground);
+  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.graph_data^.color^.ground);
+  AGraph^.canvas^.Pen.Color := AGraph^.canvas^.Brush.Color;
+
   //cairo_rectangle(AGraph^.cr, AGraph^.X1, AGraph^.graph_data^.Y1, AGraph^.graph_data^.X2, AGraph^.Y2);
   AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.graph_data^.canvas_y1,
                             AGraph^.graph_data^.canvas_x2, AGraph^.canvas_y2);
+
   // Операция cairo_fill() используется вместо контура как шаблон закрашивания.
   //cairo_fill(AGraph^.cr);
 end;
@@ -562,16 +628,21 @@ end;
 procedure DrawBorder(AGraph: PGraph);
 begin
   // Бордер
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.border);
+  // SetCgaColor(AGraph, AGraph^.graph_data^.color^.border);
+  AGraph^.canvas^.Brush.Style := bsClear;
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.border);
 
   //cairo_rectangle(AGraph^.cr, AGraph^.X1, AGraph^.Y1, AGraph^.X2, AGraph^.Y2);
   AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.canvas_y1,
                             AGraph^.canvas_x2, AGraph^.canvas_y2);
+
+  AGraph^.canvas^.Brush.Style := bsSolid;
+
   // Дополнительная вертикальная линия (какой то косяк с cairo_rectangle)
   //cairo_move_to(AGraph^.cr, AGraph^.X2, AGraph^.Y1);
-  AGraph^.canvas^.MoveTo(AGraph^.canvas_x2, AGraph^.canvas_y1);
+  //AGraph^.canvas^.MoveTo(AGraph^.canvas_x2, AGraph^.canvas_y1);
   //cairo_line_to(AGraph^.cr, AGraph^.X2, AGraph^.Y2);
-  AGraph^.canvas^.LineTo(AGraph^.canvas_x2, AGraph^.canvas_y2);
+  //AGraph^.canvas^.LineTo(AGraph^.canvas_x2, AGraph^.canvas_y2);
   // Операция cairo_stroke() применяет виртуальный карандаш вдоль контура.
   // cairo_stroke(AGraph^.cr);
 end;
@@ -620,11 +691,12 @@ begin
   DrawGraphArea(AGraph);
 
   // Бордер
-  DrawBorder(AGraph);
+  // DrawBorder(AGraph);
 
   // Сетка
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.grid);
-  SetDashLineStyle(AGraph);
+  //SetCgaColor(AGraph, AGraph^.graph_data^.color^.grid);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.grid);
+  SetDotLineStyle(AGraph);
   if AGraph^.graph_data^.status^.grid_x then
   begin
     _tmpx := _tmp0x;
@@ -656,7 +728,8 @@ begin
   // cairo_stroke(AGraph^.cr);
 
   // Шкала X
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.text);
+  // SetCgaColor(AGraph, AGraph^.graph_data^.color^.text);
+  AGraph^.canvas^.Font.Color := GetColorByCga(AGraph^.graph_data^.color^.text);
   if AGraph^.graph_data^.status^.number_x then
   begin
     _tmpx := _tmp0x;
@@ -669,7 +742,7 @@ begin
   end;
 
   // Шкала Y
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.text);
+  //SetCgaColor(AGraph, AGraph^.graph_data^.color^.text);
   if AGraph^.graph_data^.status^.number_y then
   begin
     _tmpy := _tmp0y;
@@ -677,7 +750,7 @@ begin
     begin
       OutGridNumber(AGraph, AGraph^.canvas_x1, Round(_tmpy), tmpy, HORIZ_DIRECTION);
       tmpy := tmpy + sty;
-      _tmpy := _tmpy + _sty;
+      _tmpy := _tmpy - _sty;
     end;
   end;
 
@@ -759,23 +832,24 @@ begin
     1:      // GM_TIME
     begin
       tmp := Round(ANumber);
-      ss := tmp mod 60;
-      mm := (tmp div 60) mod 60;
-      hh := (tmp div 3600) mod 24;
-      dd := tmp div 86400;
-      if (ANumber < 0) or (ANumber >= 864000000) then
-        buffer := '##:##:##'
-      else
-        buffer := Format('%02d:%02d:%02d', [hh, mm, ss]);
-      if dd > 0 then
-      begin
-        OutTextXY(AGraph, x1, y1, buffer, AOrient);
-        buffer := Format('(%d)', [dd]);
-        OutTextXY(AGraph, x2, y2, buffer, AOrient);
-       end
-       else
-         OutTextXY(AGraph, x, y, buffer, AOrient);
-       // break;
+      //ss := tmp mod 60;
+      //mm := (tmp div 60) mod 60;
+      //hh := (tmp div 3600) mod 24;
+      //dd := tmp div 86400;
+      //if (ANumber < 0) or (ANumber >= 864000000) then
+      //  buffer := '##:##:##'
+      //else
+      //  buffer := Format('%.2d:%.2d:%.2d', [hh, mm, ss]);
+      //if dd > 0 then
+      //begin
+      //  OutTextXY(AGraph, x1, y1, buffer, AOrient);
+      //  buffer := Format('(%d)', [dd]);
+      //  OutTextXY(AGraph, x2, y2, buffer, AOrient);
+      // end
+      // else
+      buffer := toolfunc.LongToStrTime(tmp);
+      OutTextXY(AGraph, x, y, buffer, AOrient);
+      // break;
     end;
     2:    // GM_OPTIMAL
     begin
@@ -819,7 +893,8 @@ procedure DrawAxis(AGraph: PGraph);
 var
   i: Integer = 0;
 begin
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.axis);
+  //SetCgaColor(AGraph, AGraph^.graph_data^.color^.axis);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.axis);
   SetSolidLineStyle(AGraph);
 
   if (AGraph^.graph_data^.y1 <= 0) and (AGraph^.graph_data^.y2 >= 0) and (AGraph^.graph_data^.status^.axis_x) then
@@ -930,7 +1005,8 @@ begin
           i := AGraph^.graph_data^.n_points;
   end;
 
-  SetCgaColor(AGraph, AGraph^.graph_data^.color^.line);
+  //SetCgaColor(AGraph, AGraph^.graph_data^.color^.line);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.line);
   SetSolidLineStyle(AGraph);
 
   _x2 := x1;
@@ -1098,6 +1174,8 @@ var
   cairo_canvas: TCairoPngCanvas;
   graphic: TGraph;
 begin
+  Result := False;
+
   if strfunc.IsEmptyStr(APNGFileName) then
     APNGFileName := DEFAULT_OUTPUT_PNG_FILENAME;
 
@@ -1115,17 +1193,13 @@ begin
   cairo_canvas := TCairoPNGCanvas.Create;
 
   try
-    // OutputFileName must set before BeginDoc; Otherwise use stream property
-    cairo_canvas.OutputFileName := APNGFileName;
-    cairo_canvas.BeginDoc;
-
     // Значения по умолчанию
     if dX <= 0 then
       dX := 20;
     if dY <= 0 then
       dY := 2;
 
-    graphfunc.InitGraph(@graphic, AGraphData, @cairo_canvas, AWidth, AHeight, dX, dY);
+    InitGraph(@graphic, AGraphData, @cairo_canvas, AWidth, AHeight, dX, dY);
 
     if AGraphData <> nil then
     begin
@@ -1145,7 +1219,16 @@ begin
         logfunc.InfoMsgFmt('Graph data scene (%f, %f) - (%f, %f)', [ASceneX1, ASceneY1, ASceneX2, ASceneY2]);
     end;
 
-    graphfunc.Draw(@graphic, AGraphData, False);
+    // OutputFileName must set before BeginDoc; Otherwise use stream property
+    cairo_canvas.OutputFileName := APNGFileName;
+    cairo_canvas.PaperWidth := AWidth;
+    cairo_canvas.PaperHeight := AHeight;
+    // cairo_canvas.Brush.Style := bsSolid;
+    cairo_canvas.BeginDoc;
+    //cairo_canvas.Orientation := Printers.poLandscape; //Orientation must set before new page
+    //cairo_canvas.NewPage;
+
+    Draw(@graphic, AGraphData, False);
 
     // cairo_fill(cr);
 

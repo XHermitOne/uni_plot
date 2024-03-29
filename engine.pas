@@ -70,8 +70,12 @@ begin
   Result := False;
 
   if DEFAULT_OUTPUT_FILE_FORMAT = 'PNG' then
-    Result := DrawPNG(AOutputFileName, APen0, AXType, AYType, AImgWidth, AImgHeight,
-                      ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY);
+    try
+      Result := DrawPNG(AOutputFileName, APen0, AXType, AYType, AImgWidth, AImgHeight,
+                        ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY);
+    except
+      logfunc.FatalMsg('Ошибка выполнения');
+    end;
 end;
 
 
@@ -111,7 +115,7 @@ var
   point: TArrayOfString;
   point_data: PGraphPoint;
 begin
-  logfunc.DebugMsg('Points parse');
+  logfunc.DebugMsgFmt('Points parse <%s>:', [AStrPenData]);
 
   if strfunc.IsEmptyStr(AStrPenData) then
   begin
