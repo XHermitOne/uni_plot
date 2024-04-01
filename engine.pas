@@ -1,7 +1,7 @@
 {
 Модуль функций движка
 
-Версия: 0.0.0.1
+Версия: 0.0.1.1
 }
 
 unit engine;
@@ -44,20 +44,20 @@ function Run(AOutputFileName: AnsiString; AXType, AYType: Byte;
 function ParseAxisType(AAxisType: AnsiString): Byte;
 //  Определить данные пера
 //  Данные в командной строке определяются как x1/y1,x2/y2,...
-function ParsePenData(AStrPenData: AnsiString): PGraphData;
+function ParsePenData(AStrPenData: AnsiString; XAxisType, YAxisType: Byte): PGraphData;
 // Функция определения кода цвета по его имени
 function ParseColorByName(AColorName: String): Byte;
 //  Определить данные сцены
 //  Данные в командной строке определяются как x1/y1,x2/y2
-function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble): Boolean;
+function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble; XAxisType, YAxisType: Byte): Boolean;
 
+// Прочитать файл данных и преобразовать данные в формате данных пера
+function ReadSrcDataFile(ASrcFileName: String): String;
 
 implementation
 
 uses
   strfunc, logfunc, toolfunc;
-
-
 
 // Функция запуска основного алгоритма
 function Run(AOutputFileName: AnsiString; AXType, AYType: Byte; 
@@ -93,22 +93,23 @@ end;
 
 //  Определить данные пера
 //  Данные в командной строке определяются как x1/y1,x2/y2,...
-function ParsePenData(AStrPenData: AnsiString): PGraphData;
+function ParsePenData(AStrPenData: AnsiString; XAxisType, YAxisType: Byte): PGraphData;
 var
   str_points: TArrayOfString;
   i: Integer = 0;
   str_point: String;
   str_count: Integer;
 
-  prev_time: LongInt = 0;
-  prev_data: Double = 0.0;
-  i_time: LongInt = 0;
+  prev_x: Double = 0;
+  prev_y: Double = 0.0;
+  //i_time: LongInt = 0;
+  x_data: Double = 0.0;
   y_data: Double = 0.0;
 
-  min_time: LongInt = 0;
-  min_data: Double = 0.0;
-  max_time: LongInt = 0;
-  max_data: Double = 0.0;
+  min_x: Double = 0;
+  min_y: Double = 0.0;
+  max_x: Double = 0;
+  max_y: Double = 0.0;
 
   pen_data: PGraphData;
 
@@ -128,51 +129,53 @@ begin
   str_count := Length(str_points);
 
   New(pen_data);
-  graphfunc.InitGraphData(pen_data, prev_time, prev_data, i_time, y_data);
+  graphfunc.InitGraphData(pen_data, prev_x, prev_y, x_data, y_data);
   SetLength(pen_data^.points, str_count);
   pen_data^.n_points := str_count;
 
-  repeat
+  for i := 0 to str_count - 1 do
+  begin
     str_point := str_points[i];
     if strfunc.IsEmptyStr(str_point) then
         break;
 
     point := strfunc.SplitStr(str_point, '/');
-    i_time := toolfunc.StrTimeToLong(point[0]);
+    if XAxisType = GM_TIME then
+      x_data := toolfunc.StrTimeToLong(point[0])
+    else
+      x_data := StrToFloat(point[0]);
     y_data := StrToFloat(point[1]);
 
     New(point_data);
-    point_data^.x := i_time;
+    point_data^.x := x_data;
     point_data^.y := y_data;
 
     pen_data^.points[i].x := point_data^.x;
     pen_data^.points[i].y := point_data^.y;
 
-    logfunc.DebugMsgFmt(#9'Point data: [%d : %f] - [%d : %f]', [prev_time, prev_data, i_time, y_data]);
+    logfunc.DebugMsgFmt(#9'Point data: [%f : %f] - [%f : %f]', [prev_x, prev_y, x_data, y_data]);
     Dispose(point_data);
 
-    prev_time := i_time;
-    prev_data := y_data;
+    prev_x := x_data;
+    prev_y := y_data;
 
     // Определяем максимаотные и минимальные значения диапазона графика
-    if prev_time < min_time then
-      min_time := prev_time;
-    if prev_data < min_data then
-      min_data := prev_data;
-    if prev_time > max_time then
-      max_time := prev_time;
-    if prev_data > max_data then
-      max_data := prev_data;
-
-    Inc(i);
-  until not strfunc.IsEmptyStr(str_point);
+    if prev_x < min_x then
+      min_x := prev_x;
+    if prev_y < min_y then
+      min_y := prev_y;
+    if prev_x > max_x then
+      max_x := prev_x;
+    if prev_y > max_y then
+      max_y := prev_y;
+  end;
 
   // Указать границы графика
-  pen_data^.x1 := min_time;
-  pen_data^.y1 := min_data;
-  pen_data^.x2 := max_time;
-  pen_data^.y2 := max_data;
-  logfunc.DebugMsgFmt('Graphic range: [%d : %f] - [%d : %f]', [min_time, min_data, max_time, max_data]);
+  pen_data^.x1 := min_x;
+  pen_data^.y1 := min_y;
+  pen_data^.x2 := max_x;
+  pen_data^.y2 := max_y;
+  logfunc.DebugMsgFmt('Graphic range: [%f : %f] - [%f : %f]', [min_x, min_y, max_x, max_y]);
 
   Result := pen_data;
 end;
@@ -180,16 +183,15 @@ end;
 
 //  Определить данные сцены
 //  Данные в командной строке определяются как x1/y1,x2/y2
-function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble): Boolean;
+function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble; XAxisType, YAxisType: Byte): Boolean;
 var
   str_points: TArrayOfString;  
-  i: Integer= 0;
   str_point: String;
   str_count: Integer;
 
-  prev_time: LongInt = 0;
-  prev_data: Double = 0.0;
-  i_time: LongInt = 0;
+  prev_x: Double = 0.0;
+  prev_y: Double = 0.0;
+  x_data: Double = 0;
   y_data: Double = 0.0;
 
   point: TArrayOfString;
@@ -217,8 +219,11 @@ begin
   if not strfunc.IsEmptyStr(str_point) then
   begin
     point := strfunc.SplitStr(str_point, '/');
-    prev_time := toolfunc.StrTimeToLong(point[0]);
-    prev_data := StrToFloat(point[1]);
+    if XAxisType = GM_TIME then
+      prev_x := toolfunc.StrTimeToLong(point[0])
+    else
+      prev_x := StrToFloat(point[0]);
+    prev_y := StrToFloat(point[1]);
   end;
 
   // Определяем вторую точку сцены
@@ -226,14 +231,17 @@ begin
   if not strfunc.IsEmptyStr(str_point) then
   begin
     point := strfunc.SplitStr(str_point, '/');
-    i_time := toolfunc.StrTimeToLong(point[0]);
+    if XAxisType = GM_TIME then
+      x_data := toolfunc.StrTimeToLong(point[0])
+    else
+      x_data := StrToFloat(point[0]);
     y_data := StrToFloat(point[1]);
   end;
 
-  logfunc.DebugMsgFmt(#9'Scene data: [%d : %f] - [%d : %f]', [prev_time, prev_data, i_time, y_data]);
-  x1^ := prev_time;
-  y1^ := prev_data;
-  x2^ := i_time;
+  logfunc.DebugMsgFmt(#9'Scene data: [%f : %f] - [%f : %f]', [prev_x, prev_y, x_data, y_data]);
+  x1^ := prev_x;
+  y1^ := prev_y;
+  x2^ := x_data;
   y2^ := y_data;
 
   Result := True;
@@ -269,5 +277,36 @@ begin
   end;  
 end;
 
+
+// Прочитать файл данных и преобразовать данные в формате данных пера
+function ReadSrcDataFile(ASrcFileName: String): String;
+var
+  data_file: Text;
+  line: String;
+  x_str, y_str: String;
+begin
+  Result := '';
+
+  if not FileExists(ASrcFileName) then
+  begin
+    logfunc.WarningMsgFmt('Файл данных <%s> не найден', [ASrcFileName]);
+    exit;
+  end;
+
+  AssignFile(data_file, ASrcFileName);
+  Reset(data_file);
+  while not Eof(data_file) do
+  begin
+    ReadLn(data_file, line);
+    if strfunc.IsStartsWith(line, '#') then
+      continue;
+    SScanf(line, '%s %s', [@x_str, @y_str]);
+
+    if strfunc.IsEmptyStr(Result) then
+      Result := Format('%s/%s', [x_str, y_str])
+    else
+      Result := Result + Format(',%s/%s', [x_str, y_str])
+  end;
+end;
 
 end.

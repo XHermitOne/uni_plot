@@ -140,9 +140,9 @@ procedure TUniPlotApplication.DoRun;
 var
   ErrorMsg: String;
 
-  output_filename: String;
+  output_filename, data_filename: String;
   xtype: Byte = 1;
-  ytype: Byte = 1;
+  ytype: Byte = 2;
 
   pen0: PGraphData = nil;
   pen1: PGraphData = nil;
@@ -182,7 +182,7 @@ var
   dy: Double = 0.0;
 begin
   // quick check parameters
-  ErrorMsg := CheckOptions('hvdl', 'help version debug log out: xtype: ytype: pen0: pen1: pen2: pen3: pen4: pen5: pen6: pen7: pen8: pen9: pen0_color: pen1_color: pen2_color: pen3_color: pen4_color: pen5_color: pen6_color: pen7_color: pen8_color: pen9_color: text_color: ground_color: border_color: grid_color: axis_color: width: height: scene: dx: dy:');
+  ErrorMsg := CheckOptions('hvdl', 'help version debug log src: out: xtype: ytype: pen0: pen1: pen2: pen3: pen4: pen5: pen6: pen7: pen8: pen9: pen0_color: pen1_color: pen2_color: pen3_color: pen4_color: pen5_color: pen6_color: pen7_color: pen8_color: pen9_color: text_color: ground_color: border_color: grid_color: axis_color: width: height: scene: dx: dy:');
   if ErrorMsg <> '' then begin
     ShowException(Exception.Create(ErrorMsg));
     Terminate;
@@ -208,7 +208,6 @@ begin
 
   // Очень странно, но при  отключении режима логирования
   // пропадает ошибка Access violation при  вызове ReadRaw
-
   if HasOption('l', 'log') then
     LOG_MODE := True;
 
@@ -223,26 +222,32 @@ begin
   if HasOption('ytype') then
     ytype := engine.ParseAxisType(Trim(GetOptionValue('ytype')));
 
+  if HasOption('src') then
+  begin
+    data_filename := Trim(GetOptionValue('src'));
+    pen0 := engine.ParsePenData(ReadSrcDataFile(data_filename), xtype, ytype);
+  end;
+
   if HasOption('pen0') then
-    pen0 := engine.ParsePenData(Trim(GetOptionValue('pen0')));
+    pen0 := engine.ParsePenData(Trim(GetOptionValue('pen0')), xtype, ytype);
   if HasOption('pen1') then
-    pen1 := engine.ParsePenData(Trim(GetOptionValue('pen1')));
+    pen1 := engine.ParsePenData(Trim(GetOptionValue('pen1')), xtype, ytype);
   if HasOption('pen2') then
-    pen2 := engine.ParsePenData(Trim(GetOptionValue('pen2')));
+    pen2 := engine.ParsePenData(Trim(GetOptionValue('pen2')), xtype, ytype);
   if HasOption('pen3') then
-    pen3 := engine.ParsePenData(Trim(GetOptionValue('pen3')));
+    pen3 := engine.ParsePenData(Trim(GetOptionValue('pen3')), xtype, ytype);
   if HasOption('pen4') then
-    pen4 := engine.ParsePenData(Trim(GetOptionValue('pen4')));
+    pen4 := engine.ParsePenData(Trim(GetOptionValue('pen4')), xtype, ytype);
   if HasOption('pen5') then
-    pen5 := engine.ParsePenData(Trim(GetOptionValue('pen5')));
+    pen5 := engine.ParsePenData(Trim(GetOptionValue('pen5')), xtype, ytype);
   if HasOption('pen6') then
-    pen6 := engine.ParsePenData(Trim(GetOptionValue('pen6')));
+    pen6 := engine.ParsePenData(Trim(GetOptionValue('pen6')), xtype, ytype);
   if HasOption('pen7') then
-    pen7 := engine.ParsePenData(Trim(GetOptionValue('pen7')));
+    pen7 := engine.ParsePenData(Trim(GetOptionValue('pen7')), xtype, ytype);
   if HasOption('pen8') then
-    pen8 := engine.ParsePenData(Trim(GetOptionValue('pen8')));
+    pen8 := engine.ParsePenData(Trim(GetOptionValue('pen8')), xtype, ytype);
   if HasOption('pen9') then
-    pen9 := engine.ParsePenData(Trim(GetOptionValue('pen9')));
+    pen9 := engine.ParsePenData(Trim(GetOptionValue('pen9')), xtype, ytype);
 
   if HasOption('pen0_color') then
     pen0_color := engine.ParseColorByName(Trim(GetOptionValue('pen0_color')));
@@ -282,7 +287,7 @@ begin
     height := StrToInt(Trim(GetOptionValue('height')));
 
   if HasOption('scene') then
-    engine.ParseSceneData(Trim(GetOptionValue('scene')), @scene_x1, @scene_y1, @scene_x2, @scene_y2);
+    engine.ParseSceneData(Trim(GetOptionValue('scene')), @scene_x1, @scene_y1, @scene_x2, @scene_y2, xtype, ytype);
   if HasOption('dx') then
     dx := StrToFloat(Trim(GetOptionValue('dx')));
   if HasOption('dy') then
@@ -293,9 +298,9 @@ begin
 	     xtype, ytype,
 	     pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9, 
 	     pen0_color, pen1_color, pen2_color, pen3_color, pen4_color, pen5_color, pen6_color, pen7_color, pen8_color, pen9_color, 
-             text_color, ground_color, border_color, grid_color, axis_color,
+         text_color, ground_color, border_color, grid_color, axis_color,
 	     width, height,
-             scene_x1, scene_y1, scene_x2, scene_y2, dx, dy);
+         scene_x1, scene_y1, scene_x2, scene_y2, dx, dy);
 
   // stop program loop
   Terminate;
@@ -324,8 +329,8 @@ begin
   PrintColorTxt(Format(#9#9'Напечатать версию программы: %s --version|-v', [ExeName]), CYAN_COLOR_TEXT);
   PrintColorTxt(Format(#9#9'Включить режим отладки: %s --debug|-d', [ExeName]), CYAN_COLOR_TEXT);
   PrintColorTxt(Format(#9#9'Включить режим журналирования: %s --log|-l', [ExeName]), CYAN_COLOR_TEXT);
-  // PrintColorTxt(Format('    Файл настройки: %s --settings=имя_файла_настройки.ini', [ExeName]), CYAN_COLOR_TEXT);
   PrintColorTxt(#9'[Параметры запуска]', CYAN_COLOR_TEXT);
+  PrintColorTxt(#9#9'Имя файла данных: --src=имя_файла.txt', CYAN_COLOR_TEXT);
   PrintColorTxt(#9#9'Имя результирующего файла: --out=имя_файла.png', CYAN_COLOR_TEXT);
   PrintColorTxt(#9#9'Тип данных оси X [N, T, D, DT, E]: --xtype=', CYAN_COLOR_TEXT);
   PrintColorTxt(#9#9'Тип данных оси Y [N, T, D, DT, E]: --ytype=', CYAN_COLOR_TEXT);

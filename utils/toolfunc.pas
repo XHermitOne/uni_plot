@@ -1,7 +1,7 @@
 {
 Модуль сервисных функций
 
-Версия: 0.0.0.1
+Версия: 0.0.1.1
 }
 unit toolfunc;
 
@@ -21,12 +21,22 @@ implementation
 
 function StrTimeToLong(ABuffer: String): LongInt;
 var
-  dt: TDateTime;
-  time_stamp: TTimeStamp;
+  _time: LongInt = 0;
+  i: Integer = 0;
+  j: Integer = 0;
+  k: Integer = 0;
+
 begin
-  dt := StrToTime(ABuffer);
-  time_stamp := DateTimeToTimeStamp(dt);
-  Result := time_stamp.Time;
+  for i := 0 to 2 do
+  begin
+    k := StrToInt(Copy(ABuffer, j, 2));
+    _time := _time * 60 + k;
+    while ABuffer[j] <> ':' do
+      Inc(j);
+    Inc(j);
+  end;
+
+  Result := _time;
 end;
 
 
@@ -39,9 +49,9 @@ begin
   else
     buffer := '##:##:##';
   if (ALTime <> 1000000000) and (ALTime >= 86400) then
-    //buffer[9] := Format('%06ld', [ALTime / 86400]);
     buffer := Format('%.6ld', [ALTime / 86400]);
   Result := buffer;
 end;
+
 
 end.
