@@ -1,7 +1,7 @@
 {
 Модуль функций движка
 
-Версия: 0.0.1.1
+Версия: 0.0.2.1
 }
 
 unit engine;
@@ -34,8 +34,7 @@ const
 // APen9 - Данные пера 10
 // ASceneX1, ASceneY1, ASceneX2, ASceneY2 - Сцена
 function Run(AOutputFileName: AnsiString; AXType, AYType: Byte;
-	     APen0, APen1, APen2, APen3, APen4, APen5, APen6, APen7, APen8, APen9: PGraphData;
-	     APen0Color, APen1Color, APen2Color, APen3Color, APen4Color, APen5Color, APen6Color, APen7Color, APen8Color, APen9Color: Byte;
+	     APens: Array of PGraphData;
 	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
 	     AImgWidth, AImgHeight: Integer;
 	     ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
@@ -61,8 +60,7 @@ uses
 
 // Функция запуска основного алгоритма
 function Run(AOutputFileName: AnsiString; AXType, AYType: Byte; 
-	     APen0, APen1, APen2, APen3, APen4, APen5, APen6, APen7, APen8, APen9: PGraphData;
-	     APen0Color, APen1Color, APen2Color, APen3Color, APen4Color, APen5Color, APen6Color, APen7Color, APen8Color, APen9Color: Byte;
+	     APens: Array of PGraphData;
 	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
 	     AImgWidth, AImgHeight: Integer;
 	     ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
@@ -71,8 +69,10 @@ begin
 
   if DEFAULT_OUTPUT_FILE_FORMAT = 'PNG' then
     try
-      Result := DrawPNG(AOutputFileName, APen0, AXType, AYType, AImgWidth, AImgHeight,
-                        ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY);
+      Result := DrawPNG(AOutputFileName, AXType, AYType, AImgWidth, AImgHeight,
+                        ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY,
+                        ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor,
+                        APens);
     except
       logfunc.FatalMsg('Ошибка выполнения');
     end;
@@ -100,21 +100,12 @@ var
   str_point: String;
   str_count: Integer;
 
-  prev_x: Double = 0;
-  prev_y: Double = 0.0;
-  //i_time: LongInt = 0;
   x_data: Double = 0.0;
   y_data: Double = 0.0;
-
-  min_x: Double = 0;
-  min_y: Double = 0.0;
-  max_x: Double = 0;
-  max_y: Double = 0.0;
 
   pen_data: PGraphData;
 
   point: TArrayOfString;
-  point_data: PGraphPoint;
 begin
   logfunc.DebugMsgFmt('Points parse <%s>:', [AStrPenData]);
 
@@ -129,7 +120,7 @@ begin
   str_count := Length(str_points);
 
   New(pen_data);
-  graphfunc.InitGraphData(pen_data, prev_x, prev_y, x_data, y_data);
+  graphfunc.InitGraphData(pen_data);
   SetLength(pen_data^.points, str_count);
   pen_data^.n_points := str_count;
 
@@ -146,36 +137,12 @@ begin
       x_data := StrToFloat(point[0]);
     y_data := StrToFloat(point[1]);
 
-    New(point_data);
-    point_data^.x := x_data;
-    point_data^.y := y_data;
+    pen_data^.points[i].x := x_data;
+    pen_data^.points[i].y := y_data;
 
-    pen_data^.points[i].x := point_data^.x;
-    pen_data^.points[i].y := point_data^.y;
+    logfunc.DebugMsgFmt(#9'Point data: [%f : %f]', [x_data, y_data]);
 
-    logfunc.DebugMsgFmt(#9'Point data: [%f : %f] - [%f : %f]', [prev_x, prev_y, x_data, y_data]);
-    Dispose(point_data);
-
-    prev_x := x_data;
-    prev_y := y_data;
-
-    // Определяем максимаотные и минимальные значения диапазона графика
-    if prev_x < min_x then
-      min_x := prev_x;
-    if prev_y < min_y then
-      min_y := prev_y;
-    if prev_x > max_x then
-      max_x := prev_x;
-    if prev_y > max_y then
-      max_y := prev_y;
   end;
-
-  // Указать границы графика
-  pen_data^.x1 := min_x;
-  pen_data^.y1 := min_y;
-  pen_data^.x2 := max_x;
-  pen_data^.y2 := max_y;
-  logfunc.DebugMsgFmt('Graphic range: [%f : %f] - [%f : %f]', [min_x, min_y, max_x, max_y]);
 
   Result := pen_data;
 end;

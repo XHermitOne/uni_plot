@@ -144,27 +144,9 @@ var
   xtype: Byte = 1;
   ytype: Byte = 2;
 
-  pen0: PGraphData = nil;
-  pen1: PGraphData = nil;
-  pen2: PGraphData = nil;
-  pen3: PGraphData = nil;
-  pen4: PGraphData = nil;
-  pen5: PGraphData = nil;
-  pen6: PGraphData = nil;
-  pen7: PGraphData = nil;
-  pen8: PGraphData = nil;
-  pen9: PGraphData = nil;
-
-  pen0_color: Byte = 0;
-  pen1_color: Byte = 0;
-  pen2_color: Byte = 0;
-  pen3_color: Byte = 0;
-  pen4_color: Byte = 0;
-  pen5_color: Byte = 0;
-  pen6_color: Byte = 0;
-  pen7_color: Byte = 0;
-  pen8_color: Byte = 0;
-  pen9_color: Byte = 0;
+  pens: Array [0..9] of PGraphData;
+  i: Integer;
+  pen_color: Byte = 0;
 
   text_color: Byte = 3;
   ground_color: Byte = 0;
@@ -181,6 +163,10 @@ var
   dx: Double = 0.0;
   dy: Double = 0.0;
 begin
+  // Инициализировать массив
+  for i := 0 to graphfunc.MAX_PEN_COUNT - 1 do
+    pens[i] := nil;
+
   // quick check parameters
   ErrorMsg := CheckOptions('hvdl', 'help version debug log src: out: xtype: ytype: pen0: pen1: pen2: pen3: pen4: pen5: pen6: pen7: pen8: pen9: pen0_color: pen1_color: pen2_color: pen3_color: pen4_color: pen5_color: pen6_color: pen7_color: pen8_color: pen9_color: text_color: ground_color: border_color: grid_color: axis_color: width: height: scene: dx: dy:');
   if ErrorMsg <> '' then begin
@@ -225,50 +211,21 @@ begin
   if HasOption('src') then
   begin
     data_filename := Trim(GetOptionValue('src'));
-    pen0 := engine.ParsePenData(ReadSrcDataFile(data_filename), xtype, ytype);
+    pens[0] := engine.ParsePenData(ReadSrcDataFile(data_filename), xtype, ytype);
   end;
 
-  if HasOption('pen0') then
-    pen0 := engine.ParsePenData(Trim(GetOptionValue('pen0')), xtype, ytype);
-  if HasOption('pen1') then
-    pen1 := engine.ParsePenData(Trim(GetOptionValue('pen1')), xtype, ytype);
-  if HasOption('pen2') then
-    pen2 := engine.ParsePenData(Trim(GetOptionValue('pen2')), xtype, ytype);
-  if HasOption('pen3') then
-    pen3 := engine.ParsePenData(Trim(GetOptionValue('pen3')), xtype, ytype);
-  if HasOption('pen4') then
-    pen4 := engine.ParsePenData(Trim(GetOptionValue('pen4')), xtype, ytype);
-  if HasOption('pen5') then
-    pen5 := engine.ParsePenData(Trim(GetOptionValue('pen5')), xtype, ytype);
-  if HasOption('pen6') then
-    pen6 := engine.ParsePenData(Trim(GetOptionValue('pen6')), xtype, ytype);
-  if HasOption('pen7') then
-    pen7 := engine.ParsePenData(Trim(GetOptionValue('pen7')), xtype, ytype);
-  if HasOption('pen8') then
-    pen8 := engine.ParsePenData(Trim(GetOptionValue('pen8')), xtype, ytype);
-  if HasOption('pen9') then
-    pen9 := engine.ParsePenData(Trim(GetOptionValue('pen9')), xtype, ytype);
-
-  if HasOption('pen0_color') then
-    pen0_color := engine.ParseColorByName(Trim(GetOptionValue('pen0_color')));
-  if HasOption('pen1_color') then
-    pen1_color := engine.ParseColorByName(Trim(GetOptionValue('pen1_color')));
-  if HasOption('pen2_color') then
-    pen2_color := engine.ParseColorByName(Trim(GetOptionValue('pen2_color')));
-  if HasOption('pen3_color') then
-    pen3_color := engine.ParseColorByName(Trim(GetOptionValue('pen3_color')));
-  if HasOption('pen4_color') then
-    pen4_color := engine.ParseColorByName(Trim(GetOptionValue('pen4_color')));
-  if HasOption('pen5_color') then
-    pen5_color := engine.ParseColorByName(Trim(GetOptionValue('pen5_color')));
-  if HasOption('pen6_color') then
-    pen6_color := engine.ParseColorByName(Trim(GetOptionValue('pen6_color')));
-  if HasOption('pen7_color') then
-    pen7_color := engine.ParseColorByName(Trim(GetOptionValue('pen7_color')));
-  if HasOption('pen8_color') then
-    pen8_color := engine.ParseColorByName(Trim(GetOptionValue('pen8_color')));
-  if HasOption('pen9_color') then
-    pen9_color := engine.ParseColorByName(Trim(GetOptionValue('pen9_color')));
+  // Данные графиков
+  for i := 0 to graphfunc.MAX_PEN_COUNT - 1 do
+  begin
+    if (pens[i] = nil) and HasOption(Format('pen%d', [i])) then
+      pens[i] := engine.ParsePenData(Trim(GetOptionValue(Format('pen%d', [i]))), xtype, ytype);
+    if HasOption(Format('pen%d_color', [i])) then
+    begin
+      pen_color := engine.ParseColorByName(Trim(GetOptionValue(Format('pen%d_color', [i]))));
+      if pens[i] <> nil then
+        pens[i]^.line_color := pen_color;
+    end;
+  end;
 
   if HasOption('text_color') then
     text_color := engine.ParseColorByName(Trim(GetOptionValue('text_color')));
@@ -296,11 +253,15 @@ begin
   { add your program here }
   engine.Run(output_filename, 
 	     xtype, ytype,
-	     pen0, pen1, pen2, pen3, pen4, pen5, pen6, pen7, pen8, pen9, 
-	     pen0_color, pen1_color, pen2_color, pen3_color, pen4_color, pen5_color, pen6_color, pen7_color, pen8_color, pen9_color, 
+	     pens,
          text_color, ground_color, border_color, grid_color, axis_color,
 	     width, height,
          scene_x1, scene_y1, scene_x2, scene_y2, dx, dy);
+
+  // Удаление графиков из памяти
+  for i := 0 to graphfunc.MAX_PEN_COUNT - 1 do
+    if pens[i] <> nil then
+      Dispose(pens[i]);
 
   // stop program loop
   Terminate;

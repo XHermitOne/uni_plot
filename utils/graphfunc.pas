@@ -1,7 +1,7 @@
 {
 Модуль функций отрисовки графиков
 
-Версия: 0.0.0.1
+Версия: 0.0.2.1
 }
 unit graphfunc;
 
@@ -60,6 +60,9 @@ const
   // Имя результирующего файла по умолчанию
   DEFAULT_OUTPUT_PNG_FILENAME: AnsiString = './output.png';
 
+  // Максимально количество перьев
+  MAX_PEN_COUNT: Integer = 10;
+
 type
 
   // Цвета элементов графика
@@ -69,7 +72,7 @@ type
     border: Byte;
     grid: Byte;
     axis: Byte;
-    line: Byte;
+    //line: Byte;
   end;
   PGraphColor = ^TGraphColor;
 
@@ -110,17 +113,14 @@ type
   PGraphData = ^TGraphData;
 
   TGraphData = record
-    status: PGraphStatus;
-    color: PGraphColor;
+    line_color: Byte;  // Цвет линии графика
 
     // Функция получения координат точки по ее индексу
     PGetPoint: procedure(AGraphData: PGraphData; X, Y: PDouble; AIndex: LongInt);
 
     n_points: LongInt; // Количество точек
     points: TArrayOfGraphPoint;  // Точки графика
-    
-    x1, y1, x2, y2: Double;  // Диапазон данных графика (Сцена)
-    canvas_x1, canvas_y1, canvas_x2, canvas_y2: Integer;  // Графическая граница области графика
+
   end;
 
  
@@ -130,7 +130,13 @@ type
     dX: Double;
     dY: Double;
     canvas_x1, canvas_y1, canvas_x2, canvas_y2: Integer;  // Размеры самого графика
-    graph_data: PGraphData;
+
+    status: PGraphStatus;
+    color: PGraphColor;
+    x1, y1, x2, y2: Double;  // Диапазон данных графика (Сцена)
+    area_x1, area_y1, area_x2, area_y2: Integer;  // Графическая граница области графика
+
+    graph_data: Array[0..9] of PGraphData;
 
     canvas: PCairoPngCanvas;
   end;
@@ -177,28 +183,17 @@ const
 
 var
   // Цвета режима графического вывода
-  LGColor: TGraphColor = (text: 3; ground: 0; border: 8; grid: 8; axis: 8; line: 14);
+  LGColor: TGraphColor = (text: 3; ground: 0; border: 8; grid: 8; axis: 8);
 
   // Цвета режима печати
-  LPColor: TGraphColor = (text: 0; ground: 15; border: 0; grid: 0; axis: 0; line: 0);
+  LPColor: TGraphColor = (text: 0; ground: 15; border: 0; grid: 0; axis: 0);
 
 var
-  LGraphData: TGraphData = (status: @LGStatus;
-		                    color: @LGColor;
-
-			                PGetPoint: nil;
+  LGraphData: TGraphData = (line_color: 14;
+                            PGetPoint: nil;
                             n_points: 0;
 
-			                points: nil;
-
-			                x1: 0;
-			                y1: 0;
-			                x2: 320;
-			                y2: 120;
-			                canvas_x1: 0;
-			                canvas_y1: 0;
-			                canvas_x2: 639;
-			                canvas_y2: 479);
+			                points: nil);
 
 // Функции обработки графика
 function GetColorByCga(AColor: Byte): TColor;
@@ -208,12 +203,13 @@ procedure SetDashLineStyle(AGraph: PGraph);
 procedure SetSolidLineStyle(AGraph: PGraph);
 
 procedure GetPoint(AGraphData: PGraphData; X, Y: PDouble; AIndex: LongInt);
-function Draw(AGraph: PGraph; AGraphData: PGraphData; AIsPrintMode: Boolean): Boolean;
+function Draw(AGraph: PGraph; AIsPrintMode: Boolean): Boolean;
 procedure CheckGraph(AGraph: PGraph);
 procedure CheckCoords(X1, X2: PInteger; AMinX, AMaxX, dX: Integer);
 procedure DrawGrid(AGraph: PGraph);
 procedure DrawAxis(AGraph: PGraph);
-function DrawGraph(AGraph: PGraph): Boolean;
+function DrawGraphs(AGraph: PGraph): Boolean;
+function DrawGraph(AGraph: PGraph; AGraphData: PGraphData): Boolean;
 function StepX(AGraph: PGraph): Double;
 function StepY(AGraph: PGraph): Double;
 function Step(AGraph: PGraph; ASt: Double; AType: Byte): Double;
@@ -221,24 +217,32 @@ procedure OutGridNumber(AGraph: PGraph; X: Integer; Y: Integer; ANumber: Double;
 function SplitGraph(AGraph: PGraph; x1, y1, x2, y2: PDouble): Boolean;
 function CrossPoint(x1, y1, x2, y2: PDouble; x: Double; AMode: Integer): Boolean;
 function SortPointsByX(APoints: TArrayOfGraphPoint; ADirection: Boolean): TArrayOfGraphPoint;
+function ZoomSceneActual(AGraphData: PGraphData; ASceneX1, ASceneY1, ASceneX2, ASceneY2: PDouble): Boolean;
 
 // Функции общего назначения
 procedure SwapInteger(ASrc, ADst: PInteger);
 procedure SwapDouble(ASrc, ADst: PDouble);
 
 // Инициализация структуры графика
-function InitGraph(AGraph: PGraph; AGraphData: PGraphData; ACAnvas: PCairoPngCanvas;
+function InitGraph(AGraph: PGraph; ACAnvas: PCairoPngCanvas;
+                   AXType, AYType: Byte;
                    AWidth, AHeight: Integer;
-                   DX, DY: Double): PGraph;
+                   ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
+                   ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                   APens: Array of PGraphData): PGraph;
+function FreeGraph(AGraph: PGraph): Boolean;
 
 // Инициализация структуры данных графика
-function InitGraphData(AGraphData: PGraphData; x1, y1, x2, y2: Double): PGraphData;
+function InitGraphData(AGraphData: PGraphData): PGraphData;
+function FreeGraphData(AGraphData: PGraphData): Boolean;
 
 // Выполнить отрисовку графика в PNG файл
 //  APNGFileName - Полное имя PNG файла
-function DrawPNG(APNGFileName: AnsiString; AGraphData: PGraphData; AXType, AYType: Byte;
+function DrawPNG(APNGFileName: AnsiString; AXType, AYType: Byte;
                  AWidth, AHeight: Integer;
-                 ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
+                 ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
+                 ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                 APens: Array of PGraphData): Boolean;
 
 
 implementation
@@ -345,23 +349,13 @@ begin
 end;
 
 // Функция полной отрисовки графика
-function Draw(AGraph: PGraph; AGraphData: PGraphData; AIsPrintMode: Boolean): Boolean;
+function Draw(AGraph: PGraph; AIsPrintMode: Boolean): Boolean;
 begin
-  AGraph^.graph_data := AGraphData;
-
-  if AGraph^.graph_data = nil then
-    AGraph^.graph_data := @LGraphData;
-
-  if AGraph^.graph_data^.status = nil then
-    AGraph^.graph_data^.status := @LGStatus;
-
-  if AGraph^.graph_data^.color = nil then
-  begin
-    if AIsPrintMode then
-      AGraph^.graph_data^.color := @LPColor
-    else
-      AGraph^.graph_data^.color := @LGColor;
-  end;
+   if AIsPrintMode then
+   begin
+      AGraph^.color := @LPColor;
+      logfunc.InfoMsg('Set print mode graph colors');
+   end;
 
   logfunc.InfoMsg('Default graph options:');
   logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.canvas_x1, AGraph^.canvas_y1]);
@@ -369,15 +363,15 @@ begin
   logfunc.InfoMsgFmt(#9'dX: %f dY: %f', [AGraph^.dX, AGraph^.dY]);
 
   // Переносим настройки на данные графика
-  AGraph^.graph_data^.canvas_x1 := AGraph^.canvas_x1;
-  AGraph^.graph_data^.canvas_y1 := AGraph^.canvas_y1;
-  AGraph^.graph_data^.canvas_x2 := AGraph^.canvas_x2;
-  AGraph^.graph_data^.canvas_y2 := AGraph^.canvas_y2;
+  AGraph^.area_x1 := AGraph^.canvas_x1;
+  AGraph^.area_y1 := AGraph^.canvas_y1;
+  AGraph^.area_x2 := AGraph^.canvas_x2;
+  AGraph^.area_y2 := AGraph^.canvas_y2;
 
   CheckGraph(AGraph);
   DrawGrid(AGraph);
   DrawAxis(AGraph);
-  DrawGraph(AGraph);
+  DrawGraphs(AGraph);
 
   Result := True;
 end;
@@ -385,54 +379,57 @@ end;
 
 // Функция проверки всех данных графика
 procedure CheckGraph(AGraph: PGraph);
+var
+  i: Integer;
 begin
-  if AGraph^.graph_data^.x1 = AGraph^.graph_data^.x2 then
-    AGraph^.graph_data^.x2 := AGraph^.graph_data^.x1 + 0.001;
-  if AGraph^.graph_data^.y1 = AGraph^.graph_data^.y2 then
-    AGraph^.graph_data^.y2 := AGraph^.graph_data^.y1 + 0.001;
-  if AGraph^.graph_data^.x1 > AGraph^.graph_data^.x2 then
-    SwapDouble(@AGraph^.graph_data^.x1, @AGraph^.graph_data^.x2);
-  if AGraph^.graph_data^.y1 > AGraph^.graph_data^.y2 then
-    SwapDouble(@AGraph^.graph_data^.y1, @AGraph^.graph_data^.y2);
+  if AGraph^.x1 = AGraph^.x2 then
+    AGraph^.x2 := AGraph^.x1 + 0.001;
+  if AGraph^.y1 = AGraph^.y2 then
+    AGraph^.y2 := AGraph^.y1 + 0.001;
+  if AGraph^.x1 > AGraph^.x2 then
+    SwapDouble(@AGraph^.x1, @AGraph^.x2);
+  if AGraph^.y1 > AGraph^.y2 then
+    SwapDouble(@AGraph^.y1, @AGraph^.y2);
 
   logfunc.InfoMsg('Check coord graph options:');
-  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1]);
-  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.graph_data^.canvas_x2, AGraph^.graph_data^.canvas_y2]);
+  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.area_x1, AGraph^.area_y1]);
+  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.area_x2, AGraph^.area_y2]);
 
-  CheckCoords(@AGraph^.graph_data^.canvas_x1, @AGraph^.graph_data^.canvas_x2, MINX, MAXX, 200);
-  CheckCoords(@AGraph^.graph_data^.canvas_y1, @AGraph^.graph_data^.canvas_y2, MINY, MAXY, 200);
+  CheckCoords(@AGraph^.area_x1, @AGraph^.area_x2, MINX, MAXX, 200);
+  CheckCoords(@AGraph^.area_y1, @AGraph^.area_y2, MINY, MAXY, 200);
 
-  if AGraph^.graph_data^.status^.number_y then
-    AGraph^.canvas_x1 := AGraph^.graph_data^.canvas_x1 + 66
+  if AGraph^.status^.number_y then
+    AGraph^.canvas_x1 := AGraph^.area_x1 + 66
   else
-    AGraph^.canvas_x1 := AGraph^.graph_data^.canvas_x1;
+    AGraph^.canvas_x1 := AGraph^.area_x1;
 
-  AGraph^.canvas_y1 := AGraph^.graph_data^.canvas_y1;
-  AGraph^.canvas_x2 := AGraph^.graph_data^.canvas_x2;
+  AGraph^.canvas_y1 := AGraph^.area_y1;
+  AGraph^.canvas_x2 := AGraph^.area_x2;
 
-  if AGraph^.graph_data^.status^.number_x then
-    AGraph^.canvas_y2 := AGraph^.graph_data^.canvas_y2 - 66
+  if AGraph^.status^.number_x then
+    AGraph^.canvas_y2 := AGraph^.area_y2 - 66
   else
-    AGraph^.canvas_y2 := AGraph^.graph_data^.canvas_y2;
+    AGraph^.canvas_y2 := AGraph^.area_y2;
 
-  AGraph^.dX := Double(AGraph^.canvas_x2 - AGraph^.canvas_x1) / (AGraph^.graph_data^.x2 - AGraph^.graph_data^.x1);
-  AGraph^.dY := Double(AGraph^.canvas_y2 - AGraph^.canvas_y1) / (AGraph^.graph_data^.y2 - AGraph^.graph_data^.y1);
+  AGraph^.dX := Double(AGraph^.canvas_x2 - AGraph^.canvas_x1) / (AGraph^.x2 - AGraph^.x1);
+  AGraph^.dY := Double(AGraph^.canvas_y2 - AGraph^.canvas_y1) / (AGraph^.y2 - AGraph^.y1);
 
   logfunc.InfoMsg('Checked graph options:');
   logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.canvas_x1, AGraph^.canvas_y1]);
   logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.canvas_x2, AGraph^.canvas_y2]);
   logfunc.InfoMsgFmt(#9'dX: %f dY: %f', [AGraph^.dX, AGraph^.dY]);
   logfunc.InfoMsg('Graph data options:');
-  logfunc.InfoMsgFmt(#9'x1: %f y1: %f', [AGraph^.graph_data^.x1, AGraph^.graph_data^.y1]);
-  logfunc.InfoMsgFmt(#9'x2: %f y2: %f', [AGraph^.graph_data^.x2, AGraph^.graph_data^.y2]);
-  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1]);
-  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.graph_data^.canvas_x2, AGraph^.graph_data^.canvas_y2]);
+  logfunc.InfoMsgFmt(#9'x1: %f y1: %f', [AGraph^.x1, AGraph^.y1]);
+  logfunc.InfoMsgFmt(#9'x2: %f y2: %f', [AGraph^.x2, AGraph^.y2]);
+  logfunc.InfoMsgFmt(#9'Canvas X1: %d Y1: %d', [AGraph^.area_x1, AGraph^.area_y1]);
+  logfunc.InfoMsgFmt(#9'Canvas X2: %d Y2: %d', [AGraph^.area_x2, AGraph^.area_y2]);
 
-  if AGraph^.graph_data^.PGetPoint = nil then
-  begin
-    AGraph^.graph_data^.PGetPoint := @GetPoint;
-    logfunc.InfoMsg('Set default <GetPoint> function');
-  end;
+  for i := 0 to MAX_PEN_COUNT - 1 do
+    if (AGraph^.graph_data[i] <> nil) and (AGraph^.graph_data[i]^.PGetPoint = nil) then
+    begin
+      AGraph^.graph_data[i]^.PGetPoint := @GetPoint;
+      logfunc.InfoMsgFmt('Pen [%d]. Set default <GetPoint> function', [i]);
+    end;
 end;
 
 
@@ -500,12 +497,12 @@ end;
 procedure DrawLabelArea(AGraph: PGraph);
 begin
   // Отрисовка области под надписи
-  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.graph_data^.color^.ground);
+  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.color^.ground);
   AGraph^.canvas^.Pen.Color := AGraph^.canvas^.Brush.Color;
 
-  AGraph^.canvas^.Rectangle(AGraph^.graph_data^.canvas_x1, AGraph^.canvas_y2,
-                            AGraph^.graph_data^.canvas_x2 + 1, AGraph^.graph_data^.canvas_y2 + 1);
-  AGraph^.canvas^.Rectangle(AGraph^.graph_data^.canvas_x1, AGraph^.graph_data^.canvas_y1,
+  AGraph^.canvas^.Rectangle(AGraph^.area_x1, AGraph^.canvas_y2,
+                            AGraph^.area_x2 + 1, AGraph^.area_y2 + 1);
+  AGraph^.canvas^.Rectangle(AGraph^.area_x1, AGraph^.area_y1,
                             AGraph^.canvas_x1, AGraph^.canvas_y2);
 end;
 
@@ -514,11 +511,11 @@ end;
 procedure DrawGraphArea(AGraph: PGraph);
 begin
   // Область поля графика
-  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.graph_data^.color^.ground);
+  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.color^.ground);
   AGraph^.canvas^.Pen.Color := AGraph^.canvas^.Brush.Color;
 
-  AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.graph_data^.canvas_y1,
-                            AGraph^.graph_data^.canvas_x2 + 1, AGraph^.canvas_y2);
+  AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.area_y1,
+                            AGraph^.area_x2 + 1, AGraph^.canvas_y2);
 end;
 
 
@@ -527,7 +524,7 @@ procedure DrawBorder(AGraph: PGraph);
 begin
   // Бордер
   AGraph^.canvas^.Brush.Style := bsClear;
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.border);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.color^.border);
 
   AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.canvas_y1,
                             AGraph^.canvas_x2, AGraph^.canvas_y2);
@@ -552,25 +549,25 @@ var
 begin
   stx := StepX(AGraph);
   sty := StepY(AGraph);
-  if AGraph^.graph_data^.status^.origin then
+  if AGraph^.status^.origin then
   begin
-    tmpx := math.Ceil(AGraph^.graph_data^.x1 / stx) * stx;
-    if (tmpx - AGraph^.graph_data^.x1) < (8 / AGraph^.dX) then
+    tmpx := math.Ceil(AGraph^.x1 / stx) * stx;
+    if (tmpx - AGraph^.x1) < (8 / AGraph^.dX) then
       tmpx := tmpx + stx;
-    tmpy := math.Ceil(AGraph^.graph_data^.y1 / sty) * sty;
-    if (tmpy - AGraph^.graph_data^.y1) < (8 / AGraph^.dY) then
+    tmpy := math.Ceil(AGraph^.y1 / sty) * sty;
+    if (tmpy - AGraph^.y1) < (8 / AGraph^.dY) then
       tmpy := tmpy + sty;
   end
   else
   begin
-    tmpx := AGraph^.graph_data^.x1 + stx;
-    tmpy := AGraph^.graph_data^.y1 + sty;
+    tmpx := AGraph^.x1 + stx;
+    tmpy := AGraph^.y1 + sty;
   end;
 
   _stx := stx * AGraph^.dX;
-  _tmp0x := AGraph^.canvas_x1 + (tmpx - AGraph^.graph_data^.x1) * AGraph^.dX;
+  _tmp0x := AGraph^.canvas_x1 + (tmpx - AGraph^.x1) * AGraph^.dX;
   _sty := sty * AGraph^.dY;
-  _tmp0y := AGraph^.canvas_y2 - (tmpy - AGraph^.graph_data^.y1) * AGraph^.dY;
+  _tmp0y := AGraph^.canvas_y2 - (tmpy - AGraph^.y1) * AGraph^.dY;
 
   // Отрисовка области под надписи
   DrawLabelArea(AGraph);
@@ -582,9 +579,9 @@ begin
   DrawBorder(AGraph);
 
   // Сетка
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.grid);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.color^.grid);
   SetDotLineStyle(AGraph);
-  if AGraph^.graph_data^.status^.grid_x then
+  if AGraph^.status^.grid_x then
   begin
     _tmpx := _tmp0x;
     while AGraph^.canvas_x2 - _tmpx > 8 do
@@ -596,7 +593,7 @@ begin
   end;
 
 
-  if AGraph^.graph_data^.status^.grid_y then
+  if AGraph^.status^.grid_y then
   begin
     _tmpy := _tmp0y;
     while _tmpy - AGraph^.canvas_y1 > 8 do
@@ -608,8 +605,8 @@ begin
   end;
 
   // Шкала X
-  AGraph^.canvas^.Font.Color := GetColorByCga(AGraph^.graph_data^.color^.text);
-  if AGraph^.graph_data^.status^.number_x then
+  AGraph^.canvas^.Font.Color := GetColorByCga(AGraph^.color^.text);
+  if AGraph^.status^.number_x then
   begin
     _tmpx := _tmp0x;
     while AGraph^.canvas_x2 - _tmpx > 8 do
@@ -621,7 +618,7 @@ begin
   end;
 
   // Шкала Y
-  if AGraph^.graph_data^.status^.number_y then
+  if AGraph^.status^.number_y then
   begin
     _tmpy := _tmp0y;
     while _tmpy - AGraph^.canvas_y1 > 8 do
@@ -640,7 +637,7 @@ var
   fl: Double = 0.0;
   i: Integer = 0;
 begin
-  if AGraph^.graph_data^.status^.origin then
+  if AGraph^.status^.origin then
   begin
     i := 0;
     while ASt < 1.0 do 
@@ -669,13 +666,13 @@ end;
 
 function StepX(AGraph: PGraph): Double;
 begin
-  Result := Step(AGraph, (AGraph^.graph_data^.x2 - AGraph^.graph_data^.x1) / ((AGraph^.canvas_x2 - AGraph^.canvas_x1) >> 5), AGraph^.graph_data^.status^.x_type);
+  Result := Step(AGraph, (AGraph^.x2 - AGraph^.x1) / ((AGraph^.canvas_x2 - AGraph^.canvas_x1) >> 5), AGraph^.status^.x_type);
 end;
 
 
 function StepY(AGraph: PGraph): Double;
 begin
-  Result := Step(AGraph, (AGraph^.graph_data^.y2 - AGraph^.graph_data^.y1) / ((AGraph^.canvas_y2 - AGraph^.canvas_y1) >> 5), AGraph^.graph_data^.status^.y_type);
+  Result := Step(AGraph, (AGraph^.y2 - AGraph^.y1) / ((AGraph^.canvas_y2 - AGraph^.canvas_y1) >> 5), AGraph^.status^.y_type);
 end;
 
 
@@ -697,9 +694,9 @@ begin
     ANumber := 0;
 
   if AOrient then
-    mode := AGraph^.graph_data^.status^.x_type
+    mode := AGraph^.status^.x_type
   else
-    mode := AGraph^.graph_data^.status^.y_type;
+    mode := AGraph^.status^.y_type;
 
   case mode of
     1:      // GM_TIME
@@ -735,27 +732,37 @@ procedure DrawAxis(AGraph: PGraph);
 var
   i: Integer = 0;
 begin
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.axis);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.color^.axis);
   SetSolidLineStyle(AGraph);
 
-  if (AGraph^.graph_data^.y1 <= 0) and (AGraph^.graph_data^.y2 >= 0) and (AGraph^.graph_data^.status^.axis_x) then
+  if (AGraph^.y1 <= 0) and (AGraph^.y2 >= 0) and (AGraph^.status^.axis_x) then
   begin
-    i := AGraph^.canvas_y2 + Round(AGraph^.graph_data^.y1 * AGraph^.dY);
+    i := AGraph^.canvas_y2 + Round(AGraph^.y1 * AGraph^.dY);
     AGraph^.canvas^.MoveTo(AGraph^.canvas_x1, i);
     AGraph^.canvas^.LineTo(AGraph^.canvas_x2, i);
   end;
 
-  if (AGraph^.graph_data^.x1 <= 0) and (AGraph^.graph_data^.x2 >= 0) and (AGraph^.graph_data^.status^.axis_y) then
+  if (AGraph^.x1 <= 0) and (AGraph^.x2 >= 0) and (AGraph^.status^.axis_y) then
   begin
-    i := AGraph^.canvas_x1 - Round(AGraph^.graph_data^.x1 * AGraph^.dX);
+    i := AGraph^.canvas_x1 - Round(AGraph^.x1 * AGraph^.dX);
     AGraph^.canvas^.MoveTo(i, AGraph^.canvas_y1);
     AGraph^.canvas^.LineTo(i, AGraph^.canvas_y2);
   end;
 end;
 
+// Отрисовка всех графиков.
+function DrawGraphs(AGraph: PGraph): Boolean;
+var
+  i: Integer;
+begin
+  for i := 0 to 9 do
+    if AGraph^.graph_data[i] <> nil then
+      DrawGraph(AGraph, AGraph^.graph_data[i]);
+  Result := True;
+end;
 
 // Отрисовка самого графика
-function DrawGraph(AGraph: PGraph): Boolean;
+function DrawGraph(AGraph: PGraph; AGraphData: PGraphData): Boolean;
 var
   _y1: Double = 0.0;
   _x1: Double = 0.0;
@@ -775,28 +782,28 @@ var
   j: LongInt = 0;
   k: LongInt = 0;
 begin
-  if AGraph^.graph_data = nil then
+  if AGraphData = nil then
   begin
-    logfunc.WarningMsg('Don"t define graphic data');
+    logfunc.WarningMsg('Do not define graphic data');
     Result := False;
     exit;
   end;
 
-  if AGraph^.graph_data^.n_points = 0 then
+  if AGraphData^.n_points = 0 then
   begin
     logfunc.WarningMsg('Empty points');
     Result := False;
     exit;
   end;
 
-  if AGraph^.graph_data^.n_points < 2 then
+  if AGraphData^.n_points < 2 then
   begin
-    logfunc.WarningMsgFmt('Point count < 2 %d', [AGraph^.graph_data^.n_points]);
+    logfunc.WarningMsgFmt('Point count < 2 %d', [AGraphData^.n_points]);
     Result := False;
     exit;
   end;
 
-  if AGraph^.graph_data^.PGetPoint = nil then
+  if AGraphData^.PGetPoint = nil then
   begin
     logfunc.WarningMsg('Not define <GetPoint> function');
     Result := False;
@@ -804,29 +811,29 @@ begin
   end;
 
   // Отсортируем точки по X
-  AGraph^.graph_data^.points := SortPointsByX(AGraph^.graph_data^.points, True);
+  AGraphData^.points := SortPointsByX(AGraphData^.points, True);
 
   // Берем первую точку
   i := 0;
-  AGraph^.graph_data^.PGetPoint(AGraph^.graph_data, @x1, @y1, i);
-  if AGraph^.graph_data^.status^.dtype then
+  AGraphData^.PGetPoint(AGraphData, @x1, @y1, i);
+  if AGraph^.status^.dtype then
   begin
-      j := AGraph^.graph_data^.n_points - 1;
-      AGraph^.graph_data^.PGetPoint(AGraph^.graph_data, @x2, @y2, j);
-      if (x2 > AGraph^.graph_data^.x1) and (x1 < AGraph^.graph_data^.x2) then
+      j := AGraphData^.n_points - 1;
+      AGraphData^.PGetPoint(AGraphData, @x2, @y2, j);
+      if (x2 > AGraph^.x1) and (x1 < AGraph^.x2) then
       begin
-        if x1 < AGraph^.graph_data^.x1 then
+        if x1 < AGraph^.x1 then
           while (j - i) > 1 do
           begin
             k := (i + j) >> 1;
-            AGraph^.graph_data^.PGetPoint(AGraph^.graph_data, @x, @y, k);
-            if (x > AGraph^.graph_data^.x1) then
+            AGraphData^.PGetPoint(AGraphData, @x, @y, k);
+            if (x > AGraph^.x1) then
             begin
               x2 := x;
               y2 := y;
               j := k;
             end
-            else if (x < AGraph^.graph_data^.x1) then
+            else if (x < AGraph^.x1) then
             begin
               x1 := x;
               y1 := y;
@@ -837,23 +844,23 @@ begin
           end;
       end
       else
-          i := AGraph^.graph_data^.n_points;
+          i := AGraphData^.n_points;
   end;
 
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.graph_data^.color^.line);
+  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraphData^.line_color);
   SetSolidLineStyle(AGraph);
 
   _x2 := x1;
   _y2 := y1;
 
   Inc(i);
-  while (i < AGraph^.graph_data^.n_points) and ((not AGraph^.graph_data^.status^.dtype) or (x1 < AGraph^.graph_data^.x2)) do 
+  while (i < AGraphData^.n_points) and ((not AGraph^.status^.dtype) or (x1 < AGraph^.x2)) do
   begin
-    AGraph^.graph_data^.PGetPoint(AGraph^.graph_data, @x2, @y2, i);
-    if not ((y1 <= AGraph^.graph_data^.y1) and (y2 <= AGraph^.graph_data^.y1)) or
-           ((y1 >= AGraph^.graph_data^.y2) and (y2 >= AGraph^.graph_data^.y2)) or
-           ((x1 <= AGraph^.graph_data^.x1) and (x2 <= AGraph^.graph_data^.x1)) or
-           ((x1 >= AGraph^.graph_data^.x2) and (x2 >= AGraph^.graph_data^.x2)) then
+    AGraphData^.PGetPoint(AGraphData, @x2, @y2, i);
+    if not ((y1 <= AGraph^.y1) and (y2 <= AGraph^.y1)) or
+           ((y1 >= AGraph^.y2) and (y2 >= AGraph^.y2)) or
+           ((x1 <= AGraph^.x1) and (x2 <= AGraph^.x1)) or
+           ((x1 >= AGraph^.x2) and (x2 >= AGraph^.x2)) then
     begin
           _x1 := _x2;
           _y1 := _y2;
@@ -862,10 +869,10 @@ begin
 
           SplitGraph(AGraph, @_x1, @_y1, @_x2, @_y2);
 
-          ix1 := Round((_x1 - AGraph^.graph_data^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
-          iy1 := AGraph^.canvas_y2 - Round((_y1 - AGraph^.graph_data^.y1) * AGraph^.dY);
-          ix2 := Round((_x2 - AGraph^.graph_data^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
-          iy2 := AGraph^.canvas_y2 - Round((_y2 - AGraph^.graph_data^.y1) * AGraph^.dY);
+          ix1 := Round((_x1 - AGraph^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
+          iy1 := AGraph^.canvas_y2 - Round((_y1 - AGraph^.y1) * AGraph^.dY);
+          ix2 := Round((_x2 - AGraph^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
+          iy2 := AGraph^.canvas_y2 - Round((_y2 - AGraph^.y1) * AGraph^.dY);
 
           AGraph^.canvas^.MoveTo(ix1, iy1);
           AGraph^.canvas^.LineTo(ix2, iy2);
@@ -883,10 +890,10 @@ end;
 // Обрезка линии
 function SplitGraph(AGraph: PGraph; x1, y1, x2, y2: PDouble): Boolean;
 begin
- CrossPoint(y1, x1, y2, x2, AGraph^.graph_data^.y1, 0);
- CrossPoint(y1, x1, y2, x2, AGraph^.graph_data^.y2, 1);
- CrossPoint(x1, y1, x2, y2, AGraph^.graph_data^.x1, 0);
- CrossPoint(x1, y1, x2, y2, AGraph^.graph_data^.x2, 1);
+ CrossPoint(y1, x1, y2, x2, AGraph^.y1, 0);
+ CrossPoint(y1, x1, y2, x2, AGraph^.y2, 1);
+ CrossPoint(x1, y1, x2, y2, AGraph^.x1, 0);
+ CrossPoint(x1, y1, x2, y2, AGraph^.x2, 1);
  Result := True;
 end;
 
@@ -934,9 +941,14 @@ end;
 
 
 // Инициализация структуры графика
-function InitGraph(AGraph: PGraph; AGraphData: PGraphData; ACanvas: PCairoPngCanvas;
+function InitGraph(AGraph: PGraph; ACanvas: PCairoPngCanvas;
+                   AXType, AYType: Byte;
                    AWidth, AHeight: Integer;
-                   DX, DY: Double): PGraph;
+                   ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
+                   ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                   APens: Array of PGraphData): PGraph;
+var
+  i: Integer;
 begin
   if AGraph = nil then
   begin
@@ -945,24 +957,144 @@ begin
     exit;
   end;
 
+  AGraph^.canvas := ACanvas;
+
+  AGraph^.status := nil;
+  AGraph^.color := nil;
+
+  //x1, y1, x2, y2 0, 0, 320, 120,
+  AGraph^.x1 := 0;
+  AGraph^.y1 := 0;
+  AGraph^.x2 := 320;
+  AGraph^.y2 := 120;
+
+  AGraph^.area_x1 := 0;
+  AGraph^.area_y1 := 0;
+  AGraph^.area_x2 := 639;
+  AGraph^.area_y2 := 479;
+
   AGraph^.canvas_x1 := 0;
   AGraph^.canvas_y1 := 0;
   AGraph^.canvas_x2 := AWidth - 1;
   AGraph^.canvas_y2 := AHeight - 1;
 
-  AGraph^.dX := DX;
-  AGraph^.dY := DY;
+  AGraph^.dX := dX;
+  AGraph^.dY := dY;
 
-  AGraph^.graph_data := AGraphData;
+  if AGraph^.status = nil then
+    AGraph^.status := @LGStatus;
+  AGraph^.status^.x_type := AXType;
+  AGraph^.status^.y_type := AYType;
 
-  AGraph^.canvas := ACanvas;
+  if AGraph^.color = nil then
+    AGraph^.color := @LGColor;
+  AGraph^.color^.text := ATextColor;
+  AGraph^.color^.ground := AGroundColor;
+  AGraph^.color^.border := ABorderColor;
+  AGraph^.color^.grid := AGridColor;
+  AGraph^.color^.axis := AAxisColor;
+
+  for i := 0 to MAX_PEN_COUNT - 1 do
+  begin
+    AGraph^.graph_data[i] := APens[i];
+    if i = 0 then
+      if AGraph^.graph_data[i] = nil then
+      begin
+        AGraph^.graph_data[i] := @LGraphData;
+        logfunc.InfoMsgFmt('Set default graph data for Pen [%d]', [i]);
+      end;
+  end;
+
+  if (ASceneX1 <> ASceneX2) and (ASceneY1 <> ASceneY2) then
+  begin
+    AGraph^.x1 := ASceneX1;
+    AGraph^.y1 := ASceneY1;
+    AGraph^.x2 := ASceneX2;
+    AGraph^.y2 := ASceneY2;
+    logfunc.InfoMsgFmt('Set graph scene (%f, %f) - (%f, %f)', [ASceneX1, ASceneY1, ASceneX2, ASceneY2]);
+  end
+  else
+  begin
+    if (AGraph^.graph_data[0] <> nil) and (AGraph^.graph_data[0]^.PGetPoint = nil) then
+    begin
+      AGraph^.graph_data[0]^.PGetPoint := @GetPoint;
+      logfunc.InfoMsg('Pen0. Set default <GetPoint> function');
+    end;
+    // Актуализируем сцену по первому графику
+    ZoomSceneActual(AGraph^.graph_data[0], @AGraph^.x1, @AGraph^.y1, @AGraph^.x2, @AGraph^.y2);
+  end;
 
   Result := AGraph;
 end;
 
+function FreeGraph(AGraph: PGraph): Boolean;
+var
+  i: Integer;
+begin
+  for i := 0 to MAX_PEN_COUNT - 1 do
+  begin
+    FreeGraphData(AGraph^.graph_data[i]);
+    //if AGraph^.graph_data[i] <> nil then
+    //begin
+    //  Dispose(AGraph^.graph_data[i]);
+    //  AGraph^.graph_data[i] := nil;
+    //end;
+  end;
+end;
+
+// Поиск значений сцены чтобы график полностью входил в нее
+function ZoomSceneActual(AGraphData: PGraphData; ASceneX1, ASceneY1, ASceneX2, ASceneY2: PDouble): Boolean;
+var
+  i: Integer;
+  x_data: Double = 0.0;
+  y_data: Double = 0.0;
+
+  min_x: Double = 0;
+  min_y: Double = 0.0;
+  max_x: Double = 0;
+  max_y: Double = 0.0;
+begin
+  Result := False;
+  if (AGraphData = nil) or (AGraphData^.n_points <= 0) then
+  begin
+    logfunc.WarningMsg('Empty points');
+    exit;
+  end;
+
+  if AGraphData^.PGetPoint = nil then
+  begin
+    logfunc.WarningMsg('Not define <GetPoint> function for zoom scene');
+    exit;
+  end;
+
+  // Берем первую точку
+  AGraphData^.PGetPoint(AGraphData, @min_x, @min_y, 0);
+  for i := 1 to AGraphData^.n_points - 1 do
+  begin
+    // Берем все последующие точки
+    AGraphData^.PGetPoint(AGraphData, @x_data, @y_data, i);
+
+    // Определяем максимаотные и минимальные значения диапазона графика
+    if x_data < min_x then
+      min_x := x_data;
+    if y_data < min_y then
+      min_y := y_data;
+    if x_data > max_x then
+      max_x := x_data;
+    if y_data > max_y then
+      max_y := y_data;
+  end;
+
+  ASceneX1^ := min_x;
+  ASceneY1^ := min_y;
+  ASceneX2^ := max_x;
+  ASceneY2^ := max_y;
+  logfunc.DebugMsgFmt('Zoom graphic range: [%f : %f] - [%f : %f]', [min_x, min_y, max_x, max_y]);
+  Result := True;
+end;
 
 // Инициализация структуры данных графика
-function InitGraphData(AGraphData: PGraphData; x1, y1, x2, y2: Double): PGraphData;
+function InitGraphData(AGraphData: PGraphData): PGraphData;
 begin
   if AGraphData = nil then
   begin
@@ -971,30 +1103,36 @@ begin
     exit;
   end;
 
+  // Цвет графика по умолчанию желтый
+  AGraphData^.line_color := YELLOW_COLOR;
+
   // Обязательно проинициализировать указатель на процедуру
   AGraphData^.PGetPoint := nil;
 
-  AGraphData^.x1 := x1;
-  AGraphData^.y1 := y1;
-  AGraphData^.x2 := x2;
-  AGraphData^.y2 := y2;
-
-  AGraphData^.status := nil;
-  AGraphData^.color := nil;
-
   AGraphData^.n_points := 0;
-
-  //x1, y1, x2, y2 0, 0, 320, 120,
-  AGraphData^.canvas_x1 := 0;
-  AGraphData^.canvas_y1 := 0;
-  AGraphData^.canvas_x2 := 639;
-  AGraphData^.canvas_y2 := 479;
+  AGraphData^.points := nil;
 
   logfunc.InfoMsg('Init graph data');
 
   Result := AGraphData;
 end;
 
+
+function FreeGraphData(AGraphData: PGraphData): Boolean;
+begin
+  Result := False;
+  if AGraphData = nil then
+    exit;
+  if AGraphData^.PGetPoint <> nil then
+    AGraphData^.PGetPoint := nil;
+  if AGraphData^.points <> nil then
+  begin
+    SetLength(AGraphData^.points, 0);
+    AGraphData^.points := nil;
+    AGraphData^.n_points := 0;
+  end;
+  Result := True;
+end;
 
 // Сортировка списка точек по X
 function SortPointsByX(APoints: TArrayOfGraphPoint; ADirection: Boolean): TArrayOfGraphPoint;
@@ -1015,9 +1153,11 @@ end;
 
 // Выполнить отрисовку графика в PNG файл
 //  APNGFileName - Полное имя PNG файла
-function DrawPNG(APNGFileName: AnsiString; AGraphData: PGraphData; AXType, AYType: Byte;
+function DrawPNG(APNGFileName: AnsiString; AXType, AYType: Byte;
                  AWidth, AHeight: Integer;
-                 ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
+                 ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
+                 ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+            	 APens: Array of PGraphData): Boolean;
 var
   cairo_canvas: TCairoPngCanvas;
   graphic: TGraph;
@@ -1044,40 +1184,23 @@ begin
     if dY <= 0 then
       dY := 2;
 
-    InitGraph(@graphic, AGraphData, @cairo_canvas, AWidth, AHeight, dX, dY);
-
-    if AGraphData <> nil then
-    begin
-      // Установить тип осей
-      if AGraphData^.status = nil then
-        AGraphData^.status := @LGStatus;
-      AGraphData^.status^.x_type := AXType;
-      AGraphData^.status^.y_type := AYType;
-
-      // Размер картинки
-      AGraphData^.canvas_x2 := AWidth - 1;
-      AGraphData^.canvas_y2 := AHeight - 1;
-      // Параметры сцены графика
-      if (ASceneX1 <> ASceneX2) and (ASceneY1 <> ASceneY2) then
-      begin
-        AGraphData^.x1 := ASceneX1;
-        AGraphData^.y1 := ASceneY1;
-        AGraphData^.x2 := ASceneX2;
-        AGraphData^.y2 := ASceneY2;
-        logfunc.InfoMsgFmt('Set graph data scene (%f, %f) - (%f, %f)', [ASceneX1, ASceneY1, ASceneX2, ASceneY2]);
-      end
-      else
-        logfunc.InfoMsgFmt('Graph data scene (%f, %f) - (%f, %f)', [ASceneX1, ASceneY1, ASceneX2, ASceneY2]);
-    end;
+    InitGraph(@graphic, @cairo_canvas, AXType, AYType,
+              AWidth, AHeight,
+              ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY,
+              ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor,
+              APens);
 
     cairo_canvas.OutputFileName := APNGFileName;
     cairo_canvas.PaperWidth := AWidth;
     cairo_canvas.PaperHeight := AHeight;
     cairo_canvas.BeginDoc;
 
-    Draw(@graphic, AGraphData, False);
+    Draw(@graphic, False);
 
     cairo_canvas.EndDoc;
+
+    FreeGraph(@graphic);
+
     Result := True;
   finally
     graphic.canvas := nil;
