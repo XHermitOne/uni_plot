@@ -9,10 +9,10 @@ import time
 
 def do_test(cmd):
     print('Start command: <%s>' % cmd)
-    start_time = time.time()
+    start_time = time.time_ns()
     cmd_list = cmd.split(' ')
     os.spawnv(os.P_WAIT, cmd_list[0], cmd_list)
-    print('Stop command: <%s> Time = %d' % (cmd, time.time() - start_time))
+    print('Stop command: <%s> Time = %f seconds' % (cmd, float(time.time_ns() - start_time) / 1000000000.0))
 
 
 commands=(
