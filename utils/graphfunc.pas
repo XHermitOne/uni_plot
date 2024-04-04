@@ -1,7 +1,7 @@
 {
 Модуль функций отрисовки графиков
 
-Версия: 0.0.2.6
+Версия: 0.0.3.1
 }
 unit graphfunc;
 
@@ -67,12 +67,11 @@ type
 
   // Цвета элементов графика
   TGraphColor= record
-    text: Byte;
-    ground: Byte;
-    border: Byte;
-    grid: Byte;
-    axis: Byte;
-    //line: Byte;
+    text: TColor;
+    ground: TColor;
+    border: TColor;
+    grid: TColor;
+    axis: TColor;
   end;
   PGraphColor = ^TGraphColor;
 
@@ -113,7 +112,7 @@ type
   PGraphData = ^TGraphData;
 
   TGraphData = record
-    line_color: Byte;  // Цвет линии графика
+    line_color: TColor;  // Цвет линии графика
 
     // Функция получения координат точки по ее индексу
     PGetPoint: procedure(AGraphData: PGraphData; X, Y: PDouble; AIndex: LongInt);
@@ -162,41 +161,22 @@ var
 
 			                line: 2);
 
-const
-  // Цвета CGA
-  BLACK_COLOR: Byte              = 0;
-  BLUE_COLOR: Byte               = 1;
-  GREEN_COLOR: Byte              = 2;
-  CYAN_COLOR: Byte               = 3;
-  RED_COLOR: Byte                = 4;
-  MAGENTA_COLOR: Byte            = 5;
-  BROWN_COLOR: Byte              = 6;
-  LIGHTGRAY_COLOR: Byte          = 7;
-  DARKGRAY_COLOR: Byte           = 8;
-  LIGHTBLUE_COLOR: Byte          = 9;
-  LIGHTGREEN_COLOR: Byte         = 10;
-  LIGTHCYAN_COLOR: Byte          = 11;
-  LIGHTRED_COLOR: Byte           = 12;
-  LIGHTMAGENTA_COLOR: Byte       = 13;
-  YELLOW_COLOR: Byte             = 14;
-  WHITE_COLOR: Byte              = 15;
 
 var
   // Цвета режима графического вывода
-  LGColor: TGraphColor = (text: 3; ground: 0; border: 8; grid: 8; axis: 8);
+  LGColor: TGraphColor = (text: clGreen; ground: clBlack; border: clGray; grid: clGray; axis: clGray);
 
   // Цвета режима печати
-  LPColor: TGraphColor = (text: 0; ground: 15; border: 0; grid: 0; axis: 0);
+  LPColor: TGraphColor = (text: clBlack; ground: clWhite; border: clBlack; grid: clBlack; axis: clBlack);
 
 var
-  LGraphData: TGraphData = (line_color: 14;
+  LGraphData: TGraphData = (line_color: clYellow;
                             PGetPoint: nil;
                             n_points: 0;
 
 			                points: nil);
 
 // Функции обработки графика
-function GetColorByCga(AColor: Byte): TColor;
 procedure OutTextXY(AGraph: PGraph; x, y: Integer; AText: AnsiString; AOrient: Boolean);
 procedure SetDotLineStyle(AGraph: PGraph);
 procedure SetDashLineStyle(AGraph: PGraph);
@@ -228,7 +208,7 @@ function InitGraph(AGraph: PGraph; ACAnvas: PCairoPngCanvas;
                    AXType, AYType: Byte;
                    AWidth, AHeight: Integer;
                    ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
-                   ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                   ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
                    APens: Array of PGraphData): PGraph;
 function FreeGraph(AGraph: PGraph): Boolean;
 
@@ -241,7 +221,7 @@ function FreeGraphData(AGraphData: PGraphData): Boolean;
 function DrawPNG(APNGFileName: AnsiString; AXType, AYType: Byte;
                  AWidth, AHeight: Integer;
                  ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
-                 ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                 ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
                  APens: Array of PGraphData): Boolean;
 
 
@@ -249,34 +229,6 @@ implementation
 
 uses
   math, strfunc, toolfunc, logfunc;
-
-// Установить текущий цвет отрисовки
-function GetColorByCga(AColor: Byte): TColor;
-begin
-  Result := Graphics.clBlack;
-  logfunc.InfoMsgFmt('Get CGA color: %d', [AColor]);
-
-  case AColor of
-    0: Result := Graphics.clBlack; 	// BLACK
-    1: Result := Graphics.clNavy;  	// BLUE
-    2: Result := Graphics.clGreen;  	// GREEN
-    3: Result := Graphics.clTeal;  	// CYAN
-    4: Result := Graphics.clMaroon; 	// RED
-    5: Result := Graphics.clPurple; 	// MAGENTA
-    6: Result := Graphics.clOlive;  	// BROWN
-    7: Result := Graphics.clSilver; 	// LIGHTGRAY
-    8: Result := Graphics.clGray;  	// DARKGRAY
-    9: Result := Graphics.clBlue;  	// LIGHTBLUE
-    10: Result := Graphics.clLime; 	// LIGHTGREEN
-    11: Result := Graphics.clAqua; 	// LIGTHCYAN
-    12: Result := Graphics.clRed; 	// LIGHTRED
-    13: Result := Graphics.clFuchsia;// LIGHTMAGENTA
-    14: Result := Graphics.clYellow;	// YELLOW
-    15: Result := Graphics.clWhite; 	// WHITE
-  else
-    logfunc.WarningMsgFmt('Incorrect CGA color: %d', [AColor]);
-  end;
-end;
 
 
 // Вывод текста
@@ -497,7 +449,7 @@ end;
 procedure DrawLabelArea(AGraph: PGraph);
 begin
   // Отрисовка области под надписи
-  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.color^.ground);
+  AGraph^.canvas^.Brush.Color := AGraph^.color^.ground;
   AGraph^.canvas^.Pen.Color := AGraph^.canvas^.Brush.Color;
 
   AGraph^.canvas^.Rectangle(AGraph^.area_x1, AGraph^.canvas_y2,
@@ -511,7 +463,7 @@ end;
 procedure DrawGraphArea(AGraph: PGraph);
 begin
   // Область поля графика
-  AGraph^.canvas^.Brush.Color := GetColorByCga(AGraph^.color^.ground);
+  AGraph^.canvas^.Brush.Color := AGraph^.color^.ground;
   AGraph^.canvas^.Pen.Color := AGraph^.canvas^.Brush.Color;
 
   AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.area_y1,
@@ -524,7 +476,7 @@ procedure DrawBorder(AGraph: PGraph);
 begin
   // Бордер
   AGraph^.canvas^.Brush.Style := bsClear;
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.color^.border);
+  AGraph^.canvas^.Pen.Color := AGraph^.color^.border;
 
   AGraph^.canvas^.Rectangle(AGraph^.canvas_x1, AGraph^.canvas_y1,
                             AGraph^.canvas_x2, AGraph^.canvas_y2);
@@ -579,7 +531,7 @@ begin
   DrawBorder(AGraph);
 
   // Сетка
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.color^.grid);
+  AGraph^.canvas^.Pen.Color := AGraph^.color^.grid;
   SetDotLineStyle(AGraph);
   if AGraph^.status^.grid_x then
   begin
@@ -605,7 +557,7 @@ begin
   end;
 
   // Шкала X
-  AGraph^.canvas^.Font.Color := GetColorByCga(AGraph^.color^.text);
+  AGraph^.canvas^.Font.Color := AGraph^.color^.text;
   if AGraph^.status^.number_x then
   begin
     _tmpx := _tmp0x;
@@ -732,7 +684,7 @@ procedure DrawAxis(AGraph: PGraph);
 var
   i: Integer = 0;
 begin
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraph^.color^.axis);
+  AGraph^.canvas^.Pen.Color := AGraph^.color^.axis;
   SetSolidLineStyle(AGraph);
 
   if (AGraph^.y1 <= 0) and (AGraph^.y2 >= 0) and (AGraph^.status^.axis_x) then
@@ -847,7 +799,7 @@ begin
           i := AGraphData^.n_points;
   end;
 
-  AGraph^.canvas^.Pen.Color := GetColorByCga(AGraphData^.line_color);
+  AGraph^.canvas^.Pen.Color := AGraphData^.line_color;
   SetSolidLineStyle(AGraph);
 
   Inc(i);
@@ -943,7 +895,7 @@ function InitGraph(AGraph: PGraph; ACanvas: PCairoPngCanvas;
                    AXType, AYType: Byte;
                    AWidth, AHeight: Integer;
                    ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
-                   ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                   ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
                    APens: Array of PGraphData): PGraph;
 var
   i: Integer;
@@ -1025,15 +977,18 @@ begin
   Result := AGraph;
 end;
 
+
 function FreeGraph(AGraph: PGraph): Boolean;
 var
   i: Integer;
 begin
+  Result := True;
   for i := 0 to MAX_PEN_COUNT - 1 do
   begin
-    FreeGraphData(AGraph^.graph_data[i]);
+    Result := Result and FreeGraphData(AGraph^.graph_data[i]);
   end;
 end;
+
 
 // Поиск значений сцены чтобы график полностью входил в нее
 function ZoomSceneActual(AGraphData: PGraphData; ASceneX1, ASceneY1, ASceneX2, ASceneY2: PDouble): Boolean;
@@ -1097,7 +1052,7 @@ begin
   end;
 
   // Цвет графика по умолчанию желтый
-  AGraphData^.line_color := YELLOW_COLOR;
+  AGraphData^.line_color := clYellow;
 
   // Обязательно проинициализировать указатель на процедуру
   AGraphData^.PGetPoint := nil;
@@ -1149,7 +1104,7 @@ end;
 function DrawPNG(APNGFileName: AnsiString; AXType, AYType: Byte;
                  AWidth, AHeight: Integer;
                  ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
-                 ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                 ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
             	 APens: Array of PGraphData): Boolean;
 var
   cairo_canvas: TCairoPngCanvas;

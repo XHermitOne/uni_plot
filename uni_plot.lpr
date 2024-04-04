@@ -1,7 +1,7 @@
 {
 Консольный режим работы программы UniPlot.
 
-Версия 0.0.1.1
+Версия 0.0.3.1
 
 @bold(Поиск утечек памяти)
 
@@ -112,7 +112,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, CustApp,
+  Classes, SysUtils, CustApp, Graphics,
   { you can add units after this }
   logfunc, toolfunc, engine, graphfunc;
 
@@ -146,13 +146,13 @@ var
 
   pens: Array [0..9] of PGraphData;
   i: Integer;
-  pen_color: Byte = 0;
+  pen_color: TColor = clWhite;
 
-  text_color: Byte = 3;
-  ground_color: Byte = 0;
-  border_color: Byte = 8;
-  grid_color: Byte = 8;
-  axis_color: Byte = 8;
+  text_color: TColor = clGreen;
+  ground_color: TColor = clBlack;
+  border_color: TColor = clGray;
+  grid_color: TColor = clGray;
+  axis_color: TColor = clGray;
 
   width: Integer = 0;
   height: Integer = 0;

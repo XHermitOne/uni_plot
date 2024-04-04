@@ -1,7 +1,7 @@
 {
 Модуль функций движка
 
-Версия: 0.0.2.1
+Версия: 0.0.3.1
 }
 
 unit engine;
@@ -11,7 +11,7 @@ unit engine;
 interface
 
 uses
-    Classes, SysUtils, Crt,
+    Classes, SysUtils, Crt, Graphics,
     exttypes, graphfunc;
 
 const
@@ -35,7 +35,7 @@ const
 // ASceneX1, ASceneY1, ASceneX2, ASceneY2 - Сцена
 function Run(AOutputFileName: AnsiString; AXType, AYType: Byte;
 	     APens: Array of PGraphData;
-	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
 	     AImgWidth, AImgHeight: Integer;
 	     ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
 
@@ -45,7 +45,7 @@ function ParseAxisType(AAxisType: AnsiString): Byte;
 //  Данные в командной строке определяются как x1/y1,x2/y2,...
 function ParsePenData(AStrPenData: AnsiString; XAxisType, YAxisType: Byte): PGraphData;
 // Функция определения кода цвета по его имени
-function ParseColorByName(AColorName: String): Byte;
+function ParseColorByName(AColorName: String): TColor;
 //  Определить данные сцены
 //  Данные в командной строке определяются как x1/y1,x2/y2
 function ParseSceneData(AStrSceneData: String; x1, y1, x2, y2: PDouble; XAxisType, YAxisType: Byte): Boolean;
@@ -61,7 +61,7 @@ uses
 // Функция запуска основного алгоритма
 function Run(AOutputFileName: AnsiString; AXType, AYType: Byte; 
 	     APens: Array of PGraphData;
-	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+	     ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
 	     AImgWidth, AImgHeight: Integer;
 	     ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double): Boolean;
 begin
@@ -216,31 +216,34 @@ end;
 
 
 // Функция определения кода цвета по его имени
-function ParseColorByName(AColorName: String): Byte;
+function ParseColorByName(AColorName: String): TColor;
 begin
+  Result := clWhite;
+
   AColorName := UpperCase(AColorName);
   case AColorName of
-    'BLACK': 	Result := BLACK_COLOR;
-    'BLUE': 	Result := BLUE_COLOR;
-    'GREEN': 	Result := GREEN_COLOR;
-    'CYAN':     Result := CYAN_COLOR;
-    'RED':      Result := RED_COLOR;
-    'MAGENTA':  Result := MAGENTA_COLOR;
-    'BROWN': 	Result := BROWN_COLOR;
-    'YELLOW':	Result := YELLOW_COLOR;
-    'WHITE':	Result := WHITE_COLOR;
-
-    'LIGHTGRAY':	Result := LIGHTGRAY_COLOR;
-    'DARKGRAY':		Result := DARKGRAY_COLOR;
-    'LIGHTBLUE':	Result := LIGHTBLUE_COLOR;
-    'LIGHTGREEN':	Result := LIGHTGREEN_COLOR;
-    'LIGTHCYAN':	Result := LIGTHCYAN_COLOR;
-    'LIGHTRED':		Result := LIGHTRED_COLOR;
-    'LIGHTMAGENTA':	Result := LIGHTMAGENTA_COLOR;
+    'BLACK': 	Result := clBlack;
+    'BLUE': 	Result := clNavy;
+    'GREEN': 	Result := clGreen;
+    'CYAN':     Result := clTeal;
+    'RED':      Result := clMaroon;
+    'MAGENTA':  Result := clPurple;
+    'BROWN': 	Result := clOlive;
+    'LIGHTGRAY':	Result := clSilver;
+    'DARKGRAY':		Result := clGray;
+    'LIGHTBLUE':	Result := clBlue;
+    'LIGHTGREEN':	Result := clLime;
+    'LIGTHCYAN':	Result := clAqua;
+    'LIGHTRED':		Result := clRed;
+    'LIGHTMAGENTA':	Result := clFuchsia;
+    'YELLOW':	Result := clYellow;
+    'WHITE':	Result := clWhite;
   else
-    logfunc.WarningMsgFmt('Not define color <%s>', [AColorName]);
-    // По умолчанию белый цвет
-    Result := WHITE_COLOR;
+    if Length(AColorName) = 6 then
+      // По умолчанию цвет RGB
+      Result := StringToColor('$' + AColorName)
+    else
+      logfunc.WarningMsgFmt('Incorrect color name <%s>', [AColorName]);
   end;  
 end;
 

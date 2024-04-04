@@ -8,9 +8,9 @@
         <Filename Value="uni_plot.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="105"/>
-        <CursorPos X="39" Y="117"/>
-        <UsageCount Value="114"/>
+        <TopLine Value="329"/>
+        <CursorPos X="13" Y="4"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/logfunc.pas"/>
@@ -18,7 +18,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="645"/>
         <CursorPos Y="657"/>
-        <UsageCount Value="114"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/sysfunc.pas"/>
@@ -26,7 +26,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="25" Y="10"/>
-        <UsageCount Value="114"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/exttypes.pas"/>
@@ -34,14 +34,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="39"/>
         <CursorPos Y="47"/>
-        <UsageCount Value="114"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/filefunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="58"/>
-        <UsageCount Value="114"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/strfunc.pas"/>
@@ -49,30 +49,31 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
         <CursorPos X="10" Y="104"/>
-        <UsageCount Value="114"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="3"/>
-        <UsageCount Value="114"/>
+        <TopLine Value="976"/>
+        <CursorPos Y="992"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="62"/>
-        <CursorPos Y="79"/>
-        <UsageCount Value="114"/>
+        <TopLine Value="229"/>
+        <CursorPos X="3" Y="245"/>
+        <UsageCount Value="115"/>
       </Unit>
       <Unit>
         <Filename Value="utils/toolfunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="14" Y="4"/>
-        <UsageCount Value="102"/>
+        <UsageCount Value="103"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/fcl-image/src/fpcanvas.pp"/>
@@ -160,8 +161,8 @@
       </Modes>
     </RunParams>
     <HistoryLists>
-      <List Name="LaunchingApplication" Type="File" Count="2">
-        <Item2 Value="/usr/bin/gnome-terminal -t &apos;Lazarus Run Output&apos; -e &apos;$(LazarusDir)/tools/runwait.sh $(TargetCmdLine)&apos;"/>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="/usr/bin/gnome-terminal -t &apos;Lazarus Run Output&apos; -e &apos;$(LazarusDir)/tools/runwait.sh $(TargetCmdLine)&apos;"/>
       </List>
       <List Name="CommandLineParameters" Count="7">
         <Item1 Value="--src=./examples/graphic/line.txt --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=0/0,50/50 --dx=10 --dy=10"/>
@@ -172,7 +173,6 @@
         <Item6 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/50,00:01:00/34,00:02:00/73,00:03:00/62,00:04:00/21"/>
         <Item7 Value="./uni_plot --debug --out=./test/output.png --xtype=T --ytype=N"/>
       </List>
-      <List Name="WorkingDirectory" Type="File" Count="1"/>
     </HistoryLists>
   </ProjectSession>
 </CONFIG>

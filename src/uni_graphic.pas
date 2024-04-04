@@ -1,7 +1,7 @@
 {
 Компонент построения графиков.
 
-Версия: 0.0.1.1
+Версия: 0.0.2.1
 }
 unit uni_graphic;
 
@@ -132,10 +132,10 @@ type
 function DrawPNGFrame(APNGFileName: AnsiString; AXType, AYType: Byte;
                       AWidth, AHeight: Integer;
                       ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
-                      ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                      ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
                   	  APens: Array of PGraphData): Boolean;
 
-function GetCgaByColor(AColor: TColor): Byte;
+//function GetCgaByColor(AColor: TColor): Byte;
 
 procedure Register;
 
@@ -217,7 +217,7 @@ end;
 procedure TUniGraphPen.SetColor(AColor: TColor);
 begin
   FColor := AColor;
-  FGraphData^.line_color := GetCgaByColor(AColor);
+  FGraphData^.line_color := AColor;
 end;
 
 
@@ -372,11 +372,7 @@ begin
     graphfunc.DrawPNG(FNextFrameFileName, Ord(FXType), Ord(FYType),
                       Width, Height,
                       FSceneX1, FSceneY1, FSceneX2, FSceneY2, FdX, FdY,
-                      GetCgaByColor(FTextColor),
-                      GetCgaByColor(FGroundColor),
-                      GetCgaByColor(FBorderColor),
-                      GetCgaByColor(FGridColor),
-                      GetCgaByColor(FAxisColor),
+                      FTextColor, FGroundColor, FBorderColor, FGridColor, FAxisColor,
                       pen_list);
   end
   else
@@ -393,11 +389,7 @@ begin
     DrawPNGFrame(FNextFrameFileName, Ord(FXType), Ord(FYType),
                  Width, Height,
                  FSceneX1, FSceneY1, FSceneX2, FSceneY2, FdX, FdY,
-                 GetCgaByColor(FTextColor),
-                 GetCgaByColor(FGroundColor),
-                 GetCgaByColor(FBorderColor),
-                 GetCgaByColor(FGridColor),
-                 GetCgaByColor(FAxisColor),
+                 FTextColor, FGroundColor, FBorderColor, FGridColor, FAxisColor,
                  pen_list);
   end;
 
@@ -429,7 +421,7 @@ end;
 function DrawPNGFrame(APNGFileName: AnsiString; AXType, AYType: Byte;
                       AWidth, AHeight: Integer;
                       ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
-                      ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                      ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: TColor;
                   	  APens: Array of PGraphData): Boolean;
 var
   cairo_canvas: TCairoPngCanvas;
@@ -482,30 +474,30 @@ begin
 end;
 
 //
-function GetCgaByColor(AColor: TColor): Byte;
-begin
-  Result := 0;
-
-  case AColor of
-    Graphics.clBlack: Result := 0; 	// BLACK
-    Graphics.clNavy: Result := 1;  	// BLUE
-    Graphics.clGreen: Result := 2; 	// GREEN
-    Graphics.clTeal: Result := 3;  	// CYAN
-    Graphics.clMaroon: Result := 4;	// RED
-    Graphics.clPurple: Result := 5;	// MAGENTA
-    Graphics.clOlive: Result := 6; 	// BROWN
-    Graphics.clSilver: Result := 7;	// LIGHTGRAY
-    Graphics.clGray: Result := 8;  	// DARKGRAY
-    Graphics.clBlue: Result := 9;  	// LIGHTBLUE
-    Graphics.clLime: Result := 10; 	// LIGHTGREEN
-    Graphics.clAqua: Result := 11; 	// LIGTHCYAN
-    Graphics.clRed: Result := 12; 	    // LIGHTRED
-    Graphics.clFuchsia: Result := 13;   // LIGHTMAGENTA
-    Graphics.clYellow: Result := 14;	// YELLOW
-    Graphics.clWhite: Result := 15; 	// WHITE
-  else
-    logfunc.WarningMsgFmt('Get default color: %d', [Result]);
-  end;
-end;
+//function GetCgaByColor(AColor: TColor): Byte;
+//begin
+//  Result := 0;
+//
+//  case AColor of
+//    Graphics.clBlack: Result := 0; 	// BLACK
+//    Graphics.clNavy: Result := 1;  	// BLUE
+//    Graphics.clGreen: Result := 2; 	// GREEN
+//    Graphics.clTeal: Result := 3;  	// CYAN
+//    Graphics.clMaroon: Result := 4;	// RED
+//    Graphics.clPurple: Result := 5;	// MAGENTA
+//    Graphics.clOlive: Result := 6; 	// BROWN
+//    Graphics.clSilver: Result := 7;	// LIGHTGRAY
+//    Graphics.clGray: Result := 8;  	// DARKGRAY
+//    Graphics.clBlue: Result := 9;  	// LIGHTBLUE
+//    Graphics.clLime: Result := 10; 	// LIGHTGREEN
+//    Graphics.clAqua: Result := 11; 	// LIGTHCYAN
+//    Graphics.clRed: Result := 12; 	    // LIGHTRED
+//    Graphics.clFuchsia: Result := 13;   // LIGHTMAGENTA
+//    Graphics.clYellow: Result := 14;	// YELLOW
+//    Graphics.clWhite: Result := 15; 	// WHITE
+//  else
+//    logfunc.WarningMsgFmt('Get default color: %d', [Result]);
+//  end;
+//end;
 
 end.
