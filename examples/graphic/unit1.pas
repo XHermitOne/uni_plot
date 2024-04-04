@@ -5,8 +5,8 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, SQLite3Conn, csvdataset, DB, BufDataset, Forms, Controls,
-  Graphics, Dialogs, ExtCtrls, StdCtrls, Buttons, TAGraph, uni_graphic;
+  Classes, SysUtils, SQLite3Conn, Forms, Controls,
+  Graphics, Dialogs, ExtCtrls, Buttons, TAGraph, uni_graphic;
 
 type
 

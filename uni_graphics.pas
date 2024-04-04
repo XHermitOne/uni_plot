@@ -8,13 +8,14 @@ unit uni_graphics;
 interface
 
 uses
-  uni_graphic, LazarusPackageIntf;
+  uni_graphic, uni_trend, LazarusPackageIntf;
 
 implementation
 
 procedure Register;
 begin
   RegisterUnit('uni_graphic', @uni_graphic.Register);
+  RegisterUnit('uni_trend', @uni_trend.Register);
 end;
 
 initialization

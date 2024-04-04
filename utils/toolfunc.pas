@@ -1,7 +1,7 @@
 {
 Модуль сервисных функций
 
-Версия: 0.0.2.1
+Версия: 0.0.3.1
 }
 unit toolfunc;
 
@@ -14,10 +14,18 @@ uses
   SysUtils;
 
 
+// Конверторы представления времени
 function StrTimeToLong(ABuffer: String): LongInt;
 function LongToStrTime(ALTime: LongInt): String;
 
+// Уникальный идентификатор в строковом виде
+function CreateStrGUID(): String;
+
 implementation
+
+uses
+  strfunc;
+
 
 function StrTimeToLong(ABuffer: String): LongInt;
 var
@@ -53,5 +61,14 @@ begin
   Result := buffer;
 end;
 
+
+// Уникальный идентификатор в строковом виде
+function CreateStrGUID(): String;
+var
+  new_guid: TGuid;
+begin
+  CreateGuid(new_guid);
+  Result := strfunc.StripStr(strfunc.StripStr(GuidToString(new_guid), '{'), '}');
+end;
 
 end.

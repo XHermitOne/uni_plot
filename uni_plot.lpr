@@ -114,7 +114,7 @@ uses
   {$ENDIF}
   Classes, SysUtils, CustApp,
   { you can add units after this }
-  logfunc, toolfunc, engine, graphfunc, unit1;
+  logfunc, toolfunc, engine, graphfunc;
 
 const
   VERSION: AnsiString = '0.0.0.1';

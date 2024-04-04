@@ -1,7 +1,7 @@
 {
 Компонент построения графиков.
 
-Версия: 0.0.0.1
+Версия: 0.0.1.1
 }
 unit uni_graphic;
 
@@ -11,7 +11,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  FileUtil,
+  FileUtil, CairoCanvas,
   graphfunc;
 
 type
@@ -127,6 +127,14 @@ type
     property Pens: TUniGraphPens read FPens write SetPens;
   end;
 
+// Выполнить отрисовку графика в PNG файл
+//  APNGFileName - Полное имя PNG файла
+function DrawPNGFrame(APNGFileName: AnsiString; AXType, AYType: Byte;
+                      AWidth, AHeight: Integer;
+                      ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
+                      ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                  	  APens: Array of PGraphData): Boolean;
+
 function GetCgaByColor(AColor: TColor): Byte;
 
 procedure Register;
@@ -205,16 +213,10 @@ begin
   Result := True;
 end;
 
-//procedure TUniGraphPen.SetSrcDataFileName(ASrcDataFileName: String);
-//begin
-//  FSrcDataFileName := ASrcDataFileName;
-//  if FileExists(FSrcDataFileName) then
-//    ReadSrcDataFile(FSrcDataFileName);
-//end;
-
 
 procedure TUniGraphPen.SetColor(AColor: TColor);
 begin
+  FColor := AColor;
   FGraphData^.line_color := GetCgaByColor(AColor);
 end;
 
@@ -252,6 +254,8 @@ end;
 
 // ---------------- TUniGraphic ----------------
 constructor TUniGraphic.Create(AOwner: TComponent);
+var
+  guid_str: String;
 begin
   inherited Create(AOwner);
 
@@ -266,8 +270,10 @@ begin
   Fdx := 0.0;
   Fdy := 0.0;
 
-  FNextFrameFileName := filefunc.JoinPath([GetTempDir(), Format('%s_next.png', [Name])]);
-  FPrevFrameFileName := filefunc.JoinPath([GetTempDir(), Format('%s_prev.png', [Name])]);
+  // Файлы кадров
+  guid_str := toolfunc.CreateStrGUID();
+  FNextFrameFileName := filefunc.JoinPath([GetTempDir(), Format('%s_next.png', [guid_str])]);
+  FPrevFrameFileName := filefunc.JoinPath([GetTempDir(), Format('%s_prev.png', [guid_str])]);
 
   FTextColor := clGreen;
   FGroundColor := clBlack;
@@ -280,6 +286,12 @@ end;
 
 destructor TUniGraphic.Destroy;
 begin
+  // Удалить файлы кадров
+  if FileExists(FNextFrameFileName) then
+    DeleteFile(FNextFrameFileName);
+  if FileExists(FPrevFrameFileName) then
+    DeleteFile(FPrevFrameFileName);
+
   FreeAndNil(FPens);
   inherited;
 end;
@@ -378,15 +390,15 @@ begin
       end
       else
         break;
-    graphfunc.DrawPNG(FNextFrameFileName, Ord(FXType), Ord(FYType),
-                      Width, Height,
-                      FSceneX1, FSceneY1, FSceneX2, FSceneY2, FdX, FdY,
-                      GetCgaByColor(FTextColor),
-                      GetCgaByColor(FGroundColor),
-                      GetCgaByColor(FBorderColor),
-                      GetCgaByColor(FGridColor),
-                      GetCgaByColor(FAxisColor),
-                      pen_list);
+    DrawPNGFrame(FNextFrameFileName, Ord(FXType), Ord(FYType),
+                 Width, Height,
+                 FSceneX1, FSceneY1, FSceneX2, FSceneY2, FdX, FdY,
+                 GetCgaByColor(FTextColor),
+                 GetCgaByColor(FGroundColor),
+                 GetCgaByColor(FBorderColor),
+                 GetCgaByColor(FGridColor),
+                 GetCgaByColor(FAxisColor),
+                 pen_list);
   end;
 
   if FileExists(FNextFrameFileName) then
@@ -410,6 +422,63 @@ procedure TUniGraphic.Paint;
 begin
   Refresh;
   inherited;
+end;
+
+// Выполнить отрисовку графика в PNG файл
+//  APNGFileName - Полное имя PNG файла
+function DrawPNGFrame(APNGFileName: AnsiString; AXType, AYType: Byte;
+                      AWidth, AHeight: Integer;
+                      ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY: Double;
+                      ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor: Byte;
+                  	  APens: Array of PGraphData): Boolean;
+var
+  cairo_canvas: TCairoPngCanvas;
+  graphic: TGraph;
+begin
+  Result := False;
+
+  if strfunc.IsEmptyStr(APNGFileName) then
+    APNGFileName := DEFAULT_OUTPUT_PNG_FILENAME;
+
+  if AWidth = 0 then
+    AWidth := graphfunc.DEFAULT_WIDTH;
+
+  if AHeight = 0 then
+    AHeight := graphfunc.DEFAULT_HEIGHT;
+
+  // logfunc.InfoMsgFmt('Draw PNG file: %s [%d x %d]', [APNGFileName, AWidth, AHeight]);
+
+  cairo_canvas := TCairoPNGCanvas.Create;
+
+  try
+    // Значения по умолчанию
+    if dX <= 0 then
+      dX := 20;
+    if dY <= 0 then
+      dY := 2;
+
+    InitGraph(@graphic, @cairo_canvas, AXType, AYType,
+              AWidth, AHeight,
+              ASceneX1, ASceneY1, ASceneX2, ASceneY2, dX, dY,
+              ATextColor, AGroundColor, ABorderColor, AGridColor, AAxisColor,
+              APens);
+
+    cairo_canvas.OutputFileName := APNGFileName;
+    cairo_canvas.PaperWidth := AWidth;
+    cairo_canvas.PaperHeight := AHeight;
+    cairo_canvas.BeginDoc;
+
+    Draw(@graphic, False);
+
+    cairo_canvas.EndDoc;
+
+    // FreeGraph(@graphic);
+
+    Result := True;
+  finally
+    graphic.canvas := nil;
+    cairo_canvas.Free;
+  end;
 end;
 
 //

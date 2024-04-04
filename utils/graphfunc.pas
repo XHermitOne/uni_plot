@@ -1,7 +1,7 @@
 {
 Модуль функций отрисовки графиков
 
-Версия: 0.0.2.1
+Версия: 0.0.2.6
 }
 unit graphfunc;
 
@@ -850,9 +850,6 @@ begin
   AGraph^.canvas^.Pen.Color := GetColorByCga(AGraphData^.line_color);
   SetSolidLineStyle(AGraph);
 
-  _x2 := x1;
-  _y2 := y1;
-
   Inc(i);
   while (i < AGraphData^.n_points) and ((not AGraph^.status^.dtype) or (x1 < AGraph^.x2)) do
   begin
@@ -862,24 +859,25 @@ begin
            ((x1 <= AGraph^.x1) and (x2 <= AGraph^.x1)) or
            ((x1 >= AGraph^.x2) and (x2 >= AGraph^.x2)) then
     begin
-          _x1 := _x2;
-          _y1 := _y2;
-          _x2 := x2;
-          _y2 := y2;
+      _x1 := x1;
+      _y1 := y1;
+      _x2 := x2;
+      _y2 := y2;
 
-          SplitGraph(AGraph, @_x1, @_y1, @_x2, @_y2);
+      SplitGraph(AGraph, @_x1, @_y1, @_x2, @_y2);
 
-          ix1 := Round((_x1 - AGraph^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
-          iy1 := AGraph^.canvas_y2 - Round((_y1 - AGraph^.y1) * AGraph^.dY);
-          ix2 := Round((_x2 - AGraph^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
-          iy2 := AGraph^.canvas_y2 - Round((_y2 - AGraph^.y1) * AGraph^.dY);
+      ix1 := Round((_x1 - AGraph^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
+      iy1 := AGraph^.canvas_y2 - Round((_y1 - AGraph^.y1) * AGraph^.dY);
+      ix2 := Round((_x2 - AGraph^.x1) * AGraph^.dX) + AGraph^.canvas_x1;
+      iy2 := AGraph^.canvas_y2 - Round((_y2 - AGraph^.y1) * AGraph^.dY);
 
-          AGraph^.canvas^.MoveTo(ix1, iy1);
-          AGraph^.canvas^.LineTo(ix2, iy2);
-          logfunc.InfoMsgFmt('Draw line (%d, %d) - (%d, %d)', [ix1, iy1, ix2, iy2]);
+      AGraph^.canvas^.MoveTo(ix1, iy1);
+      AGraph^.canvas^.LineTo(ix2, iy2);
+      logfunc.InfoMsgFmt('Draw line (%d, %d) - (%d, %d)', [ix1, iy1, ix2, iy2]);
     end;
 
-    x2 := x1;
+    x1 := x2;
+    y1 := y2;
     Inc(i);
   end;
 
@@ -1034,11 +1032,6 @@ begin
   for i := 0 to MAX_PEN_COUNT - 1 do
   begin
     FreeGraphData(AGraph^.graph_data[i]);
-    //if AGraph^.graph_data[i] <> nil then
-    //begin
-    //  Dispose(AGraph^.graph_data[i]);
-    //  AGraph^.graph_data[i] := nil;
-    //end;
   end;
 end;
 
