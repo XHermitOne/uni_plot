@@ -1,7 +1,7 @@
 {
 Модуль функций отрисовки графиков
 
-Версия: 0.0.3.1
+Версия: 0.0.3.2
 }
 unit graphfunc;
 
@@ -806,10 +806,10 @@ begin
   while (i < AGraphData^.n_points) and ((not AGraph^.status^.dtype) or (x1 < AGraph^.x2)) do
   begin
     AGraphData^.PGetPoint(AGraphData, @x2, @y2, i);
-    if not ((y1 <= AGraph^.y1) and (y2 <= AGraph^.y1)) or
-           ((y1 >= AGraph^.y2) and (y2 >= AGraph^.y2)) or
-           ((x1 <= AGraph^.x1) and (x2 <= AGraph^.x1)) or
-           ((x1 >= AGraph^.x2) and (x2 >= AGraph^.x2)) then
+    if not ((y1 <= AGraph^.y1) and (y2 <= AGraph^.y1) or
+           (y1 >= AGraph^.y2) and (y2 >= AGraph^.y2) or
+           (x1 <= AGraph^.x1) and (x2 <= AGraph^.x1) or
+           (x1 >= AGraph^.x2) and (x2 >= AGraph^.x2)) then
     begin
       _x1 := x1;
       _y1 := y1;

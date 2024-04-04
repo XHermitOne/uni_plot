@@ -20,7 +20,7 @@
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="116"/>
-        <CursorPos X="15" Y="128"/>
+        <CursorPos X="27" Y="129"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -34,11 +34,10 @@
       </Unit>
       <Unit>
         <Filename Value="../../src/uni_graphic.pas"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="381"/>
         <CursorPos Y="392"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../utils/graphfunc.pas"/>
@@ -48,24 +47,7 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="3">
-      <Position>
-        <Filename Value="../../src/uni_graphic.pas"/>
-        <Caret Line="62" Column="3" TopLine="40"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/uni_graphic.pas"/>
-        <Caret Line="432" Column="23" TopLine="423"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/uni_graphic.pas"/>
-        <Caret Line="220" Column="35" TopLine="209"/>
-      </Position>
-      <Position>
-        <Filename Value="../../src/uni_graphic.pas"/>
-        <Caret Line="375" TopLine="365"/>
-      </Position>
-    </JumpHistory>
+    <JumpHistory HistoryIndex="-1"/>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>
