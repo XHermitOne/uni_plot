@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="5">
+    <Name Value="uni_graphics_compact"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="src;utils"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)/"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files>
+      <Item>
+        <Filename Value="src/uni_graphic.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="uni_graphic"/>
+      </Item>
+      <Item>
+        <Filename Value="src/uni_trend.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="uni_trend"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/exttypes.pas"/>
+        <UnitName Value="exttypes"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/filefunc.pas"/>
+        <UnitName Value="filefunc"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/graphfunc.pas"/>
+        <UnitName Value="graphfunc"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/logfunc.pas"/>
+        <UnitName Value="logfunc"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/strfunc.pas"/>
+        <UnitName Value="strfunc"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/sysfunc.pas"/>
+        <UnitName Value="sysfunc"/>
+      </Item>
+      <Item>
+        <Filename Value="utils/toolfunc.pas"/>
+        <UnitName Value="toolfunc"/>
+      </Item>
+    </Files>
+    <RequiredPkgs>
+      <Item>
+        <PackageName Value="cairocanvas_pkg"/>
+      </Item>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
