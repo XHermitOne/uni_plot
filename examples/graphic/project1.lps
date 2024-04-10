@@ -18,20 +18,22 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="4"/>
-        <CursorPos X="24" Y="13"/>
+        <CursorPos X="35" Y="9"/>
         <UsageCount Value="23"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../src/uni_graphic.pas"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="29" Y="21"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="171"/>
+        <CursorPos X="6" Y="185"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../utils/graphfunc.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="847"/>
         <CursorPos Y="865"/>
@@ -57,7 +59,128 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="238" TopLine="226"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="239" TopLine="226"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="240" TopLine="226"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="384" TopLine="375"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="182" TopLine="165"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="369" TopLine="358"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="182" TopLine="171"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="183" TopLine="171"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="185" TopLine="171"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="188" TopLine="171"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="194" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="195" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="196" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="198" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="199" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="196" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="198" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="199" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="196" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="198" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="199" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="196" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="198" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="199" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="201" TopLine="184"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="204" TopLine="186"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="207" TopLine="189"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="208" TopLine="190"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="211" TopLine="193"/>
+      </Position>
+      <Position>
+        <Filename Value="../../src/uni_graphic.pas"/>
+        <Caret Line="369" TopLine="357"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>
