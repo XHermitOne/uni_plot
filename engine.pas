@@ -1,7 +1,7 @@
 {
 Модуль функций движка
 
-Версия: 0.0.3.1
+Версия: 0.0.4.1
 }
 
 unit engine;
@@ -88,6 +88,8 @@ begin
     Result := GM_OPTIMAL;
   if AAxisType = 'T' then
     Result := GM_TIME;
+  if AAxisType = 'DT' then
+    Result := GM_DATETIME;
 end;
 
 
@@ -128,11 +130,13 @@ begin
   begin
     str_point := str_points[i];
     if strfunc.IsEmptyStr(str_point) then
-        break;
+      break;
 
     point := strfunc.SplitStr(str_point, '/');
     if XAxisType = GM_TIME then
       x_data := toolfunc.StrTimeToLong(point[0])
+    else if XAxisType = GM_DATETIME then
+      x_data := toolfunc.StrDateTimeToUnixTimeStamp(point[0])
     else
       x_data := StrToFloat(point[0]);
     y_data := StrToFloat(point[1]);
@@ -188,6 +192,8 @@ begin
     point := strfunc.SplitStr(str_point, '/');
     if XAxisType = GM_TIME then
       prev_x := toolfunc.StrTimeToLong(point[0])
+    else if XAxisType = GM_DATETIME then
+      prev_x := toolfunc.StrDateTimeToUnixTimeStamp(point[0])
     else
       prev_x := StrToFloat(point[0]);
     prev_y := StrToFloat(point[1]);
@@ -200,6 +206,8 @@ begin
     point := strfunc.SplitStr(str_point, '/');
     if XAxisType = GM_TIME then
       x_data := toolfunc.StrTimeToLong(point[0])
+    else if XAxisType = GM_DATETIME then
+      x_data := toolfunc.StrDateTimeToUnixTimeStamp(point[0])
     else
       x_data := StrToFloat(point[0]);
     y_data := StrToFloat(point[1]);

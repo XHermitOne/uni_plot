@@ -1,7 +1,7 @@
 {
 Компонент построения графиков.
 
-Версия: 0.0.2.1
+Версия: 0.0.3.1
 }
 unit uni_graphic;
 
@@ -57,7 +57,7 @@ type
     property Definitions[AIndex : Integer] : TUniGraphPen Read GetDef Write SetDef; default;
   end;
 
-  TUniGraphAxisType = (atExp = 0, atTime = 1, atOptimal = 2);
+  TUniGraphAxisType = (atExp = 0, atTime = 1, atOptimal = 2, atDateTime = 3);
 
   TUniGraphic = class(TImage)
   private

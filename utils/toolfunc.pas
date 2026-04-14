@@ -1,7 +1,7 @@
 {
 Модуль сервисных функций
 
-Версия: 0.0.3.1
+Версия: 0.0.4.1
 }
 unit toolfunc;
 
@@ -11,12 +11,19 @@ unit toolfunc;
 interface
 
 uses
-  SysUtils;
+  SysUtils, DateUtils;
 
+const
+  { Шаблон по умолчанию }
+  DEFAULT_SRC_DATETIME_FMT: AnsiString = 'yyyy-mm-dd"T"hh:nn:ss';
+  DEFAULT_OUT_DATETIME_FMT: AnsiString = 'yyyy-mm-dd hh:nn:ss';
 
 // Конверторы представления времени
 function StrTimeToLong(ABuffer: String): LongInt;
 function LongToStrTime(ALTime: LongInt): String;
+
+function StrDateTimeToUnixTimeStamp(ABuffer: String): Int64;
+function UnixTimeStampToStrDateTime(AUnixTimeStamp: Int64): String;
 
 // Уникальный идентификатор в строковом виде
 function CreateStrGUID(): String;
@@ -62,6 +69,22 @@ begin
 end;
 
 
+function StrDateTimeToUnixTimeStamp(ABuffer: String): Int64;
+var
+  dt: TDateTime;
+begin
+  dt := ISO8601ToDate(ABuffer);
+  Result := DateTimeToUnix(dt);
+end;
+
+function UnixTimeStampToStrDateTime(AUnixTimeStamp: Int64): String;
+var
+  dt: TDateTime;
+begin
+  dt := UnixToDateTime(AUnixTimeStamp);
+  Result := FormatDateTime(DEFAULT_OUT_DATETIME_FMT, dt)
+end;
+
 // Уникальный идентификатор в строковом виде
 function CreateStrGUID(): String;
 var
@@ -70,5 +93,6 @@ begin
   CreateGuid(new_guid);
   Result := strfunc.StripStr(strfunc.StripStr(GuidToString(new_guid), '{'), '}');
 end;
+
 
 end.

@@ -38,7 +38,8 @@ commands=(
           #'./uni_plot --debug --src=./test/plot_graph.txt.8 --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=111000.0/0.0,350000.0/500.0',
           #'./uni_plot --debug --src=./test/plot_graph.txt.8 --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE',
           #'./uni_plot --debug --src=./test/plot_graph.txt.8 --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=FAAAAA',
-          './uni_plot --debug --src=./examples/graphic/line.txt --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=-10/0,40/50 --dx=10 --dy=10',
+          #'./uni_plot --debug --src=./examples/graphic/line.txt --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=-10/0,40/50 --dx=10 --dy=10',
+          './uni_plot --debug --src=./test/trend_graph1.txt --out=./test/output.png --xtype=DT --ytype=N --width=1280 --height=480 --pen0_color=LIGHTBLUE',
           )
 
 

@@ -35,6 +35,7 @@ const
   GM_EXP: Byte = 0;
   GM_TIME: Byte = 1;
   GM_OPTIMAL: Byte = 2;
+  GM_DATETIME: Byte = 3;
 
   // Clear graphical screen before plotting or not
   CLEAR: Boolean = False;
@@ -332,7 +333,7 @@ end;
 // Функция проверки всех данных графика
 procedure CheckGraph(AGraph: PGraph);
 var
-  i: Integer;
+  i, y_correct: Integer;
 begin
   if AGraph^.x1 = AGraph^.x2 then
     AGraph^.x2 := AGraph^.x1 + 0.001;
@@ -351,7 +352,7 @@ begin
   CheckCoords(@AGraph^.area_y1, @AGraph^.area_y2, MINY, MAXY, 200);
 
   if AGraph^.status^.number_y then
-    AGraph^.canvas_x1 := AGraph^.area_x1 + 66
+    AGraph^.canvas_x1 := AGraph^.area_x1 + 50
   else
     AGraph^.canvas_x1 := AGraph^.area_x1;
 
@@ -359,7 +360,16 @@ begin
   AGraph^.canvas_x2 := AGraph^.area_x2;
 
   if AGraph^.status^.number_x then
-    AGraph^.canvas_y2 := AGraph^.area_y2 - 66
+  begin
+    // Коррекция ширины поля подписи в зависимости от типа
+    if AGraph^.status^.x_type = GM_TIME then
+      y_correct := 60
+    else if AGraph^.status^.x_type = GM_DATETIME then
+      y_correct := 100
+    else
+      y_correct := 50;
+    AGraph^.canvas_y2 := AGraph^.area_y2 - y_correct;
+  end
   else
     AGraph^.canvas_y2 := AGraph^.area_y2;
 
@@ -667,6 +677,12 @@ begin
           buffer := '0';
         OutTextXY(AGraph, x, y, buffer, AOrient);
        end;
+    end;
+    3:      // GM_DATETIME
+    begin
+      tmp := Round(ANumber);
+      buffer := toolfunc.UnixTimeStampToStrDateTime(tmp);
+      OutTextXY(AGraph, x, y, buffer, AOrient);
     end;
     0:     // GM_EXP
     begin

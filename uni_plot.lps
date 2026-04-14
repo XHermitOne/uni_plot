@@ -10,7 +10,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="329"/>
         <CursorPos X="13" Y="4"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="utils/logfunc.pas"/>
@@ -18,7 +18,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="645"/>
         <CursorPos Y="657"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="utils/sysfunc.pas"/>
@@ -26,7 +26,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="25" Y="10"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="utils/exttypes.pas"/>
@@ -34,14 +34,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="39"/>
         <CursorPos Y="47"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="utils/filefunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="58"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="utils/strfunc.pas"/>
@@ -49,46 +49,34 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
         <CursorPos X="10" Y="104"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="806"/>
-        <CursorPos X="12" Y="812"/>
-        <UsageCount Value="115"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="351"/>
+        <CursorPos X="38" Y="362"/>
+        <UsageCount Value="148"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="engine.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="229"/>
-        <CursorPos X="3" Y="245"/>
-        <UsageCount Value="115"/>
+        <TopLine Value="128"/>
+        <CursorPos Y="139"/>
+        <UsageCount Value="148"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="utils/toolfunc.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="14" Y="4"/>
-        <UsageCount Value="103"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/fcl-image/src/fpcanvas.pp"/>
-        <UnitName Value="FPCanvas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="101"/>
-        <CursorPos X="35" Y="111"/>
-        <UsageCount Value="1"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/inc/mathh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="104"/>
-        <CursorPos X="14" Y="114"/>
-        <UsageCount Value="1"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="72"/>
+        <CursorPos Y="86"/>
+        <UsageCount Value="136"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/lazarus/components/cairocanvas/cairocanvas.pas"/>
@@ -96,66 +84,118 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="112"/>
         <CursorPos X="19" Y="936"/>
-        <UsageCount Value="5"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/objpas/classes/classesh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="16"/>
-        <CursorPos X="4" Y="28"/>
-        <UsageCount Value="3"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/fpcsrc/rtl/inc/typshrdh.inc"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="95"/>
-        <CursorPos X="3" Y="101"/>
-        <UsageCount Value="3"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/graphics.pp"/>
-        <UnitName Value="Graphics"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="133"/>
-        <CursorPos X="3" Y="146"/>
-        <UsageCount Value="3"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/lcl/printers.pas"/>
-        <UnitName Value="Printers"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="342"/>
-        <CursorPos X="3" Y="78"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="src/uni_graphic.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="316"/>
-        <CursorPos X="22" Y="334"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="62"/>
+        <CursorPos X="41" Y="60"/>
+        <UsageCount Value="27"/>
       </Unit>
       <Unit>
         <Filename Value="../icutils_pack/netfunc.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="106"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="../icutils_pack/graphfunc.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2"/>
         <CursorPos X="13" Y="14"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="3"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/rtl-objpas/src/inc/dateutil.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="458"/>
+        <CursorPos X="10" Y="469"/>
+        <UsageCount Value="7"/>
+      </Unit>
+      <Unit>
+        <Filename Value="src/uni_trend.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="6"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory HistoryIndex="16">
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="237" Column="18" TopLine="73"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="140" TopLine="119"/>
+      </Position>
+      <Position>
+        <Filename Value="engine.pas"/>
+        <Caret Line="290" TopLine="268"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="85" TopLine="70"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="78" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="79" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="80" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="81" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="82" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="85" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="82" Column="6" TopLine="67"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/toolfunc.pas"/>
+        <Caret Line="86" Column="22" TopLine="76"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="363" Column="35" TopLine="34"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="355" Column="46" TopLine="342"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="632" Column="50" TopLine="629"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="197" Column="11" TopLine="186"/>
+      </Position>
+      <Position>
+        <Filename Value="utils/graphfunc.pas"/>
+        <Caret Line="449" Column="59" TopLine="444"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode="default">
         <Mode Name="default">
           <local>
-            <CommandLineParams Value="--src=./examples/graphic/line.txt --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=0/0,50/50 --dx=10 --dy=10"/>
+            <CommandLineParams Value="--debug --src=./test/trend_graph1.txt --out=./test/output.png --xtype=DT --ytype=N --width=1280 --height=480 --pen0_color=LIGHTBLUE"/>
           </local>
         </Mode>
       </Modes>
@@ -164,14 +204,15 @@
       <List Name="LaunchingApplication" Type="File" Count="1">
         <Item1 Value="/usr/bin/gnome-terminal -t &apos;Lazarus Run Output&apos; -e &apos;$(LazarusDir)/tools/runwait.sh $(TargetCmdLine)&apos;"/>
       </List>
-      <List Name="CommandLineParameters" Count="7">
-        <Item1 Value="--src=./examples/graphic/line.txt --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=0/0,50/50 --dx=10 --dy=10"/>
-        <Item2 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/0.11,00:01:00/0.4,00:02:00/0.25,00:03:00/0.3,00:04:00/0.77 --pen0_color=LIGHTBLUE --pen1=00:00:00/0.5,00:01:00/0.3,00:02:00/0.2,00:03:00/0.6,00:04:00/0.2 --pen1_color=MAGENTA"/>
-        <Item3 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/0.11,00:01:00/0.4,00:02:00/0.25,00:03:00/0.3,00:04:00/0.77"/>
-        <Item4 Value="--out=./test/output.png --xtype=T --ytype=N"/>
-        <Item5 Value="--src=./test/plot_graph.txt.8 --out=./test/output.png --xtype=N --ytype=N --width=640 --height=480 --pen0_color=LIGHTBLUE"/>
-        <Item6 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/50,00:01:00/34,00:02:00/73,00:03:00/62,00:04:00/21"/>
-        <Item7 Value="./uni_plot --debug --out=./test/output.png --xtype=T --ytype=N"/>
+      <List Name="CommandLineParameters" Count="8">
+        <Item1 Value=" --debug --src=./test/trend_graph1.txt --out=./test/output.png --xtype=DT --ytype=N --width=1280 --height=480 --pen0_color=LIGHTBLUE"/>
+        <Item2 Value="--src=./examples/graphic/line.txt --out=./test/output.png --xtype=N --ytype=N --width=480 --height=480 --pen0_color=LIGHTBLUE --scene=0/0,50/50 --dx=10 --dy=10"/>
+        <Item3 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/0.11,00:01:00/0.4,00:02:00/0.25,00:03:00/0.3,00:04:00/0.77 --pen0_color=LIGHTBLUE --pen1=00:00:00/0.5,00:01:00/0.3,00:02:00/0.2,00:03:00/0.6,00:04:00/0.2 --pen1_color=MAGENTA"/>
+        <Item4 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/0.11,00:01:00/0.4,00:02:00/0.25,00:03:00/0.3,00:04:00/0.77"/>
+        <Item5 Value="--out=./test/output.png --xtype=T --ytype=N"/>
+        <Item6 Value="--src=./test/plot_graph.txt.8 --out=./test/output.png --xtype=N --ytype=N --width=640 --height=480 --pen0_color=LIGHTBLUE"/>
+        <Item7 Value="--out=./test/output.png --xtype=T --ytype=N --pen0=00:00:00/50,00:01:00/34,00:02:00/73,00:03:00/62,00:04:00/21"/>
+        <Item8 Value="./uni_plot --debug --out=./test/output.png --xtype=T --ytype=N"/>
       </List>
     </HistoryLists>
   </ProjectSession>
