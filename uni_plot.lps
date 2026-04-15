@@ -10,7 +10,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="329"/>
         <CursorPos X="13" Y="4"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
       </Unit>
       <Unit>
         <Filename Value="utils/logfunc.pas"/>
@@ -18,7 +18,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="645"/>
         <CursorPos Y="657"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
       </Unit>
       <Unit>
         <Filename Value="utils/sysfunc.pas"/>
@@ -26,7 +26,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="25" Y="10"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
       </Unit>
       <Unit>
         <Filename Value="utils/exttypes.pas"/>
@@ -34,14 +34,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="39"/>
         <CursorPos Y="47"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
       </Unit>
       <Unit>
         <Filename Value="utils/filefunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="58"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
       </Unit>
       <Unit>
         <Filename Value="utils/strfunc.pas"/>
@@ -49,7 +49,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
         <CursorPos X="10" Y="104"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
@@ -57,8 +57,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <TopLine Value="351"/>
-        <CursorPos X="38" Y="362"/>
-        <UsageCount Value="148"/>
+        <CursorPos X="49" Y="366"/>
+        <UsageCount Value="149"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -66,7 +66,7 @@
         <IsPartOfProject Value="True"/>
         <TopLine Value="128"/>
         <CursorPos Y="139"/>
-        <UsageCount Value="148"/>
+        <UsageCount Value="149"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -75,7 +75,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="72"/>
         <CursorPos Y="86"/>
-        <UsageCount Value="136"/>
+        <UsageCount Value="137"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
