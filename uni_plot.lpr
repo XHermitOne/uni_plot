@@ -106,7 +106,7 @@ Call trace for block $0005D210 size 200
 
 program uni_plot;
 
-{$mode objfpc}{$H+}
+//{$mode objfpc}{$H+}
 
 uses
   {$IFDEF UNIX}

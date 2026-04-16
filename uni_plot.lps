@@ -10,7 +10,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="329"/>
         <CursorPos X="13" Y="4"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="utils/logfunc.pas"/>
@@ -18,7 +18,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="645"/>
         <CursorPos Y="657"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="utils/sysfunc.pas"/>
@@ -26,7 +26,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="37"/>
         <CursorPos X="25" Y="10"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="utils/exttypes.pas"/>
@@ -34,14 +34,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="39"/>
         <CursorPos Y="47"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="utils/filefunc.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="58"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="utils/strfunc.pas"/>
@@ -49,16 +49,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
         <CursorPos X="10" Y="104"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="utils/graphfunc.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="351"/>
-        <CursorPos X="49" Y="366"/>
-        <UsageCount Value="149"/>
+        <TopLine Value="355"/>
+        <CursorPos X="25" Y="361"/>
+        <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -66,7 +66,7 @@
         <IsPartOfProject Value="True"/>
         <TopLine Value="128"/>
         <CursorPos Y="139"/>
-        <UsageCount Value="149"/>
+        <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -75,49 +75,41 @@
         <EditorIndex Value="1"/>
         <TopLine Value="72"/>
         <CursorPos Y="86"/>
-        <UsageCount Value="137"/>
+        <UsageCount Value="166"/>
         <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../../../../fpcupdeluxe/lazarus/components/cairocanvas/cairocanvas.pas"/>
-        <UnitName Value="CairoCanvas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="112"/>
-        <CursorPos X="19" Y="936"/>
-        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="src/uni_graphic.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="62"/>
         <CursorPos X="41" Y="60"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="24"/>
       </Unit>
       <Unit>
         <Filename Value="../icutils_pack/netfunc.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="106"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="0"/>
       </Unit>
       <Unit>
         <Filename Value="../icutils_pack/graphfunc.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2"/>
         <CursorPos X="13" Y="14"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="0"/>
       </Unit>
       <Unit>
         <Filename Value="../../../../fpcupdeluxe/fpcsrc/packages/rtl-objpas/src/inc/dateutil.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="458"/>
         <CursorPos X="10" Y="469"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="4"/>
       </Unit>
       <Unit>
         <Filename Value="src/uni_trend.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="16">

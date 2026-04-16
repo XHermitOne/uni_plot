@@ -1,5 +1,6 @@
 [target]
 programs=uni_plot
+# unitdir=./utils
 
 [compiler]
 #unitdir=/home/xhermit/fpcupdeluxe/fv_utf8
@@ -12,6 +13,19 @@ unitdir=./utils
 #includedir=../../rtl-console/src/inc
 # includedir=./unilib/include
 # unitdir=/etc/alternatives/fp-utils/units/x86_64-linux/
+#unitdir=/home/xhermit/fpcupdeluxe/fpc/units/x86_64-linux
+
+[install]
+fpcpackage=y
 
 [default]
-fpcdir=/home/xhermit/fpcupdeluxe/fpc
+fpcdir=/home/xhermit/fpcupdeluxe/fpcsrc
+
+#[prerules]
+#RTL=..
+#INC=$(RTL)/inc
+#COMMON=$(RTL)/common
+#PROCINC=$(RTL)/$(ARCH)
+#UNIXINC=$(RTL)/unix
+#OSPROCINC=$(RTL)/linux/$(CPU_TARGET)
+#LINUXINC=$(RTL)/linux
