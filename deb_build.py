@@ -127,8 +127,8 @@ def compile_and_link():
     """
     Компиляция и сборка.
     """
-    sys_cmd('make clean')
-    sys_cmd('make')
+    sys_cmd('rm ./uni_plot')
+    sys_cmd('/home/xhermit/fpcupdeluxe/lazarus/lazbuild ./uni_plot.lpr')
 
 def build_deb():
     """
@@ -178,7 +178,7 @@ def build():
     start_time = time.time()
     # print_color_txt(__doc__,CYAN_COLOR_TEXT)
     sys_cmd('rm *.deb')
-    # compile_and_link()
+    compile_and_link()
     build_deb()
     sys_cmd('ls *.deb')
     print_color_txt(__doc__, CYAN_COLOR_TEXT)
