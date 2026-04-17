@@ -9,8 +9,13 @@ import os
 import os.path
 import platform
 
-__version__ = (0, 0, 4, 1)
+__version__ = (0, 0, 5, 1)
 __author__ = 'xhermit'
+
+# Домашняя папка
+HOME_PATH = os.environ['HOME'] if 'HOME' in os.environ else (os.environ.get('HOMEDRIVE',
+                                                                            '') + os.environ.get('HOMEPATH', ''))
+
 
 def getPlatform():
     """
@@ -128,7 +133,8 @@ def compile_and_link():
     Компиляция и сборка.
     """
     sys_cmd('rm ./uni_plot')
-    sys_cmd('/home/xhermit/fpcupdeluxe/lazarus/lazbuild ./uni_plot.lpr')
+    lazbuild_path = os.path.join(HOME_PATH, 'fpcupdeluxe', 'lazarus', 'lazbuild')
+    sys_cmd('%s ./uni_plot.lpr' % lazbuild_path)
 
 def build_deb():
     """
